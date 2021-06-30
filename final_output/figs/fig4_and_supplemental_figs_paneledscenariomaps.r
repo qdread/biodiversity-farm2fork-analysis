@@ -1,4 +1,4 @@
-# Draw 10 panel scenario maps for supplements.
+# Draw 10 panel scenario maps for supplements. Note: One of these figures is also presented as Figure 4 in the MS.
 # QDR / 30 June 2021
 
 source('figs/load_data_for_maps.R')

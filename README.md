@@ -22,12 +22,18 @@ The subdirectory `foreign_import_analysis` contains R scripts `19` through `24`,
 
 ### Creation of visualizations and other output
 
-The subdirectory `final_outputs` contains three additional subdirectories:
+The subdirectory `final_outputs` contains two additional data processing scripts. `25_create_summary_data.R` produces final CSV outputs needed to create figures and tables from the raw results. `26_compile_Shiny_data.R` does additional processing for the data object used in the Shiny app.
+
+After running those scripts, scripts to produce the visualizations are found in three additional subdirectories:
 
 - `figs`: scripts to produce figures shown in manuscript. First, the three scripts called `figs_v2_summarydata*.R` should be run to produce the final CSV outputs from the raw results, which are needed to create the figures.
 - `tables`: scripts to produce the tables shown in the supplements.
 - `supplements`: RMarkdown notebooks for the supplementary figures and tables documents.
 
-There is also an R script `compile_Shiny_data.R` which does additional processing for the data object used in the Shiny app.
+## Availability of data
 
-*last modified by QDR, 28 Jun 2021*
+The raw data are archived in (location to be determined).
+
+The NLCD 30m land cover for the contiguous USA, Alaska, and Hawaii are included as compressed `.tar.gz` files and will need to be decompressed before running the code.
+
+*last modified by QDR, 30 June 2021*

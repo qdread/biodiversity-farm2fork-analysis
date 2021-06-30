@@ -34,6 +34,10 @@ After running those scripts, scripts to produce the visualizations are found in 
 
 The raw data are archived in (location to be determined).
 
-The NLCD 30m land cover for the contiguous USA, Alaska, and Hawaii are included as compressed `.tar.gz` files and will need to be decompressed before running the code.
+Some files are included as compressed `.tar.gz` files and will need to be decompressed before running the code:
+
+- The NLCD 30m land cover for the contiguous USA, Alaska, and Hawaii
+- All raw FAOSTAT data files
+- The USDA NASS 2012 Census of Agriculture data file
 
 *last modified by QDR, 30 June 2021*

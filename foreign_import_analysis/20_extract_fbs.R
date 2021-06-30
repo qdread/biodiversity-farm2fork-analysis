@@ -74,19 +74,3 @@ write_csv(fbs_weights_wide, file.path(fp_out, 'fbs_indiv_weights_wide.csv'))
 write_csv(fbs_agg_weights_wide, file.path(fp_out, 'fbs_agg_weights_wide.csv'))
 write_csv(fbs_percapita_wide, file.path(fp_out, 'fbs_indiv_percapita_wide.csv'))
 write_csv(fbs_agg_percapita_wide, file.path(fp_out, 'fbs_agg_percapita_wide.csv'))
-
-# older test code below ---------------------------------------------------
-
-# For now we just need the United States values.
-fbs_usa <- fbs_weights_wide %>%
-  filter(area %in% 'United States of America')
-
-# Just extract oilcrops and grains
-fbs_usa %>% 
-  filter(item %in% c('Oilcrops', 'Cereals - Excluding Beer')) %>%
-  mutate(feed_prop_wt = feed / domestic_supply_quantity) %>%
-  select(-area_code,-area,-item_code,-seed,-losses,-`other_uses_(non-food)`,-tourist_consumption,-residuals)
-
-# Use the broader categories to find the proportions that correspond with BEA codes
-items_use <- c('Cereals - Excluding Beer', 'Starchy Roots', 'Sugar Crops', 'Pulses', 'Oilcrops', '')
-# FIXME do this later.

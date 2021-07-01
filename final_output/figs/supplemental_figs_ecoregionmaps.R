@@ -2,7 +2,7 @@
 # Same for foreign countries.
 # QDR / Virtualland / 05 Apr 2021
 
-source('figs/figs_v2_loaddata.R')
+source('figs/load_data_all_figs.R')
 
 # Additionally, load foreign ecoregion map and country map
 global_eco_map <- st_read('data/raw_data/landuse/ecoregions/tnc_global_equalarea.gpkg')

@@ -1,10 +1,10 @@
 # COMPILE DATA FOR SHINY APP
 # QDR / Virtualland / 04 June 2021
 
-source('figs/figs_v2_loaddata.R')
+source('figs/load_data_all_figs.R')
 
 
-# Additional processing from figs_v2_foreign.R
+# Additional processing 
 
 library(data.table)
 setDT(foreign_vlt_export)

@@ -26,7 +26,7 @@ The subdirectory `final_outputs` contains two additional data processing scripts
 
 After running those scripts, scripts to produce the visualizations are found in three additional subdirectories:
 
-- `figs`: scripts to produce figures shown in manuscript. First, the three scripts called `figs_v2_summarydata*.R` should be run to produce the final CSV outputs from the raw results, which are needed to create the figures.
+- `figs`: scripts to produce figures shown in manuscript. The scripts that create the figures are named `fig1.R`, etc., and `supplemental_figs_xxxx.R`, etc. These scripts source other scripts in the `figs` directory which load the needed data and functions.
 - `tables`: scripts to produce the tables shown in the supplements.
 - `supplements`: RMarkdown notebooks for the supplementary figures and tables documents.
 

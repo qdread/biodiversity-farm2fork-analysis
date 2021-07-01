@@ -3,7 +3,7 @@
 
 # Modified 30 June 2021: Cleaned up script and deleted unused code for clean repo.
 
-source('figs/figs_v2_loaddata.R')
+source('figs/load_data_all_figs.R')
 source('figs/load_data_foreign_maps.R')
 
 # Summary figs comparing land and species lost -------------------------------------

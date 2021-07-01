@@ -1,7 +1,7 @@
 # Figure 1
 # QDR 30 June 2021
 
-source('figs/figs_v2_loaddata.R')
+source('figs/load_data_all_figs.R')
 
 # Diet differences among scenarios ----------------------------------------
 

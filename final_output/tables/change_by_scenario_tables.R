@@ -2,7 +2,7 @@
 
 # Domestic (by county)
 
-source('figs/figs_v2_loaddata.R')
+source('figs/load_data_all_figs.R')
 
 # Load data from figs_v2_foreign.R
 

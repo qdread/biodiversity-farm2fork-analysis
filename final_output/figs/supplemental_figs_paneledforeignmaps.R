@@ -1,7 +1,7 @@
 # Foreign maps drawn as multipanel figures (to reduce number of figures in supplement)
 # QDR / Virtualland / 24 May 2021
 
-source('figs/figs_v2_loaddata.R')
+source('figs/load_data_all_figs.R')
 source('figs/load_data_foreign_maps.R')
 
 # Only make figures for animals, plants, and total

@@ -4,7 +4,7 @@
 # This was part of figs_v2_panelmaps.R in the old code.
 # This script must be run before creating Figure 2, the 10 panel scenario maps in the supplement, and the paneled baseline maps in the supplement.
 
-source('figs/figs_v2_loaddata.R')
+source('figs/load_data_all_figs.R')
 library(Rutilitybelt)
 library(data.table)
 library(scico)

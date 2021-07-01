@@ -3,8 +3,7 @@
 
 # Modified 30 June 2021: Clean up for new repo.
 
-source('figs/load_data_for_maps.R')
-source('figs/us_map_fxns_baselinemaps.R')
+source('figs/load_data_domestic_maps.R')
 
 fp_fig <- 'data/cfs_io_analysis/scenario_v2_figs/paneled_baseline_maps'
 

@@ -3,7 +3,7 @@
 
 # Pasted together from pieces of several scripts from old repo.
 
-source('figs/load_data_for_maps.R')
+source('figs/load_data_domestic_maps.R')
 
 county_land_map_base <- county_land_map_panels[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']
 county_extinction_map_base <- county_extinction_map_panels[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']

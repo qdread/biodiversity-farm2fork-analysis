@@ -11,7 +11,7 @@ library(tidyverse)
 # Consumption data for all scenarios (2012)
 county_consumption <- read_csv(file.path(final_output_path, 'county_totaldemand2012_allscenarios.csv'))
 # Production downscaled (2012)
-county_production <- read_csv(file.path(intermediate_output_path, 'county_production2012.csv'))
+county_production <- read_csv(file.path(final_output_path, 'county_production2012.csv'))
 
 # Get vector of primary agricultural goods.
 bea_codes <- unique(county_consumption$BEA_code)

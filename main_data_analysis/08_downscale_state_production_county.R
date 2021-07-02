@@ -26,4 +26,4 @@ production_counties <- inner_join(county_weightings, production_states, by = c('
   mutate(county_fips = paste0(state_fips, county_fips))
 
 # Write county production to CSV
-write_csv(production_counties, file.path(intermediate_output_path, 'county_production2012.csv'))
+write_csv(production_counties, file.path(final_output_path, 'county_production2012.csv'))

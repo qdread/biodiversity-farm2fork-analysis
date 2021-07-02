@@ -1,7 +1,7 @@
 # COMPILE DATA FOR SHINY APP
 # QDR / Virtualland / 04 June 2021
 
-source('figs/load_data_all_figs.R')
+source(file.path(code_path, 'final_output/figs/load_data_all_figs.R'))
 
 
 # Additional processing 
@@ -147,8 +147,8 @@ replace_na_dt(county_land_flow_sums)
 
 # Load foreign goods data -------------------------------------------------
 
-import_crop <- fread('data/cfs_io_analysis/fao_VLT_provisional_crops_disaggregated.csv')
-import_animal <- fread('data/cfs_io_analysis/fao_VLT_provisional_animalonly.csv')
+import_crop <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional_crops_disaggregated.csv'))
+import_animal <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional_animalonly.csv'))
 
 import_crop <- tidyr::separate(import_crop[scenario != '', ], scenario, into = c('D', 'scenario_diet', 'W', 'scenario_waste'), sep = '_')
 import_crop[, c('D','W') := NULL]
@@ -170,7 +170,7 @@ setnames(county_goods_flow_sums, old = c('flow_inbound', 'flow_outbound'), new =
 setnames(county_land_flow_sums, old = c('flow_inbound', 'flow_outbound'), new = c('flow_inbound_domestic', 'flow_outbound_domestic'))
 setnames(county_extinction_flow_sums, old = c('land_use', 'extinction_inbound', 'extinction_outbound', 'extinction_inbound_foreign', 'extinction_inbound_total'), new = c('land_type', 'flow_inbound_domestic', 'flow_outbound_domestic', 'flow_inbound_foreign', 'flow_inbound_total'))
 
-global_country_map <- st_read('data/raw_data/landuse/ecoregions/countries_global_equalarea.gpkg') %>%
+global_country_map <- st_read(file.path(spatial_output_path, 'countries_global_equalarea.gpkg')) %>%
   select(NAME_LONG, ISO_A3)
 
 iso_lookup <- st_drop_geometry(global_country_map) %>% rename(country_name = NAME_LONG)
@@ -241,7 +241,7 @@ unique_counties <- unique(county_land_flow_sums$county)
 setdiff(unique_counties, county_lookup$fips_county)
 
 # Add on the extra counties from the harmonization
-fips_harmonization <- read_csv('data/crossreference_tables/fips_harmonization.csv', col_types = 'ccccc')
+fips_harmonization <- read_csv(file.path(fp_crosswalk, 'fips_harmonization.csv'), col_types = 'ccccc')
 
 fips_harmonization_extra <- fips_harmonization %>%
   select(FIPS_data, name_data) %>%
@@ -353,11 +353,4 @@ objs <- c('bea_lookup', 'iso_lookup', 'state_lookup', 'county_lookup', 'county_m
           'foreign_goods_flow_sums', 'foreign_land_flow_sums', 'foreign_extinction_flow_sums')
 
 # Save all to .RData
-save(list = objs, file = 'data/cfs_io_analysis/shinyapp_data/all_app_data.RData')
-
-# Write the maps to GPKG
-st_write(county_map, 'data/cfs_io_analysis/shinyapp_data/county_map.gpkg', driver = 'GPKG', append = FALSE)
-st_write(global_country_map, 'data/cfs_io_analysis/shinyapp_data/global_country_map.gpkg', driver = 'GPKG', append = FALSE)
-
-# Save to CSVs
-walk(objs[-(5:6)], ~ write_csv(get(.), glue('data/cfs_io_analysis/shinyapp_data/{.}.csv')))
+save(list = objs, file = file.path(final_output_path, 'all_app_data.RData'))

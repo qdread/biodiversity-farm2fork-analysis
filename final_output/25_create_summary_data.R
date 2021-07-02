@@ -11,7 +11,7 @@ library(furrr) # To parallelize
 
 # Land flows by ecoregion -------------------------------------------------
 
-tnc_landflows <- vroom('data/cfs_io_analysis/scenarios/landflows_tnc_x_tnc_all_scenarios.csv')
+tnc_landflows <- vroom(file.path(final_output_path, 'landflows_tnc_x_tnc_all_scenarios.csv'))
 
 flows_outbound <- tnc_landflows %>%
   select(-TNC_to) %>%
@@ -37,16 +37,16 @@ flows_inbound <- tnc_landflows %>%
 
 tnc_land_flows <- full_join(flows_outbound, flows_inbound)
 
-write_csv(tnc_land_flows, 'data/cfs_io_analysis/scenarios/landflows_tnc_sums_all_scenarios.csv')
+write_csv(tnc_land_flows, file.path(final_output_path, 'landflows_tnc_sums_all_scenarios.csv'))
 
 # Total demand sums -------------------------------------------------------
 
 ### County-level consumption and production
-county_production <- vroom('data/cfs_io_analysis/county_production2012.csv')
-county_consumption <- vroom('data/cfs_io_analysis/county_consumption2012_allscenarios.csv') # 320 MB
-county_totaldemand <- vroom('data/cfs_io_analysis/county_totaldemand2012_allscenarios.csv') # 430 MB
+county_production <- vroom(file.path(final_output_path, 'county_production2012.csv'))
+county_consumption <- vroom(file.path(final_output_path, 'county_consumption2012_allscenarios.csv')) # 320 MB
+county_totaldemand <- vroom(file.path(final_output_path, 'county_totaldemand2012_allscenarios.csv')) # 430 MB
 
-source('figs/figs_v2_lookups.R')
+source(file.path(code_path, 'final_output/figs/load_data_lookup_tables.R'))
 
 # Need to reshape county_totaldemand, sum across counties, and possibly calculate relative to baseline.
 totaldemand_sums <- cbind(county_totaldemand[,c('BEA_code', 'scenario')], demand = rowSums(county_totaldemand[,-(1:2)])) %>%
@@ -63,14 +63,14 @@ totaldemand_sums <- totaldemand_sums %>%
   group_by(BEA_code, short_name, kingdom, scenario_diet, scenario_waste) %>%
   summarize(demand = sum(demand))
 
-write_csv(totaldemand_sums, 'data/cfs_io_analysis/scenarios/totaldemand_sums_all_scenarios.csv')
+write_csv(totaldemand_sums, file.path(final_output_path, 'totaldemand_sums_all_scenarios.csv'))
 
 # Goods flows by county ---------------------------------------------------
 
 options(mc.cores = 8)
 plan(multicore)
 
-fp_goods <- 'data/cfs_io_analysis/county_consumption_csvs'
+fp_goods <- file.path(intermediate_output_path, 'county_consumption_csvs')
 
 scenario_combos <- expand_grid(diet = c('baseline','planetaryhealth','medstyle','usstyle','vegetarian'),
                                waste = c('baseline','preconsumer','consumer','allavoidable'))
@@ -99,11 +99,11 @@ sum_goods_flows_county <- function(diet, waste) {
 
 county_goods_flows <- future_pmap_dfr(scenario_combos, sum_goods_flows_county)
 
-write_csv(county_goods_flows, 'data/cfs_io_analysis/scenarios/goodsflows_county_sums_all_scenarios.csv')
+write_csv(county_goods_flows, file.path(final_output_path, 'goodsflows_county_sums_all_scenarios.csv'))
 
 # Land flows by county ----------------------------------------------------
 
-fp_landcounties <- 'data/cfs_io_analysis/county_land_consumption_csvs'
+fp_landcounties <- file.path(intermediate_output_path, 'county_land_consumption_csvs')
 
 scenario_combos <- expand_grid(diet = c('baseline','planetaryhealth','medstyle','usstyle','vegetarian'),
                                waste = c('baseline','preconsumer','consumer','allavoidable'))
@@ -134,4 +134,4 @@ sum_land_flows_county <- function(diet, waste) {
 
 county_land_flows <- future_pmap_dfr(scenario_combos, sum_land_flows_county)
 
-write_csv(county_land_flows, 'data/cfs_io_analysis/scenarios/landflows_county_sums_all_scenarios.csv')
+write_csv(county_land_flows, file.path(final_output_path, 'landflows_county_sums_all_scenarios.csv'))

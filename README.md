@@ -1,6 +1,6 @@
 # Biodiversity: Farm2Fork
 
-Code to reproduce all analysis presented in the manuscript **Biodiversity effects of food system sustainability actions from farm to fork**, and the data for the associated Shiny app ([temporary link](https://shiny.sesync.org/apps/bioiversity-farm2fork)).
+Code to reproduce all analysis presented in the manuscript **Biodiversity effects of food system sustainability actions from farm to fork**, and the data for the associated Shiny app ([temporary link](https://shiny.sesync.org/apps/biodiversity-farm2fork)).
 
 **Citation (to be updated when final)**: Read, Quentin D., Kelly L. Hondula, and Mary K. Muth. Biodiversity effects of food system sustainability actions from farm to fork. *PNAS*, in preparation.
 
@@ -42,4 +42,4 @@ All the data on the Figshare repository are included as compressed `.zip` files 
 
 The file names and paths to the data within the archive are listed in this repository `docs/data_filenames.csv`.
 
-*last modified by QDR, 30 June 2021*
+*last modified by QDR, 02 July 2021*

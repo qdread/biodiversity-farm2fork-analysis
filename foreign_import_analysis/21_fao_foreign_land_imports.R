@@ -13,16 +13,14 @@ library(data.table)
 library(purrr)
 library(Rutilitybelt)
 
-fp_fao <- 'data/cfs_io_analysis/faostat2017'
-
 # Read all processed FAOSTAT data for 2017
-read_all_csvs(fp_fao)
+read_all_csvs(file.path(intermediate_output_path, 'faostat_processed'))
 
 # Read harmonization table with BEA codes.
-fao_codes_table <- fread('data/crossreference_tables/faostat_all_codes_harmonized.csv')
+fao_codes_table <- fread(file.path(fp_crosswalk, 'faostat_all_codes_harmonized.csv'))
 
 # Read relative consumption factors vs. baseline by BEA code for each scenario
-scenario_factors_bea <- fread('data/cfs_io_analysis/bea_consumption_factors_diet_waste_scenarios_foreign.csv')
+scenario_factors_bea <- fread(file.path(intermediate_output_path, 'bea_consumption_factors_diet_waste_scenarios_foreign.csv'))
 
 # Melt scenario_factors_bea to long form.
 scenario_factors_long <- melt(scenario_factors_bea, id.vars = c('BEA_389_code', 'BEA_389_def'), variable.name = 'scenario', value.name = 'consumption_factor')
@@ -156,9 +154,9 @@ VLT_sums_crop <- VLT_sums_crop[!is.na(scenario)]
 # First source through line 154 of fao_foreign_land_imports_DT.R (we need the production + trade crop dataframe)
 
 # We also need to load the FAO food balance sheet data.
-fbs <- fread('data/cfs_io_analysis/fao_fbs/fbs_indiv_weights_wide.csv')
+fbs <- fread(file.path(intermediate_output_path, 'faostat_processed', 'fbs_indiv_weights_wide.csv'))
 # Load the harmonization table for FBS "Aggregate" codes and the individual production codes
-fbs_prod_crosswalk <- fread('data/crossreference_tables/fao_prodcodes_harmonized_fbs.csv')
+fbs_prod_crosswalk <- fread(file.path(fp_crosswalk, 'fao_prodcodes_harmonized_fbs.csv'))
 
 # Next join the animal production and trade data frames. This is different than the old way which removed everything other than grazers.
 
@@ -441,17 +439,17 @@ VLT_sums_animal[, VLT_pasture := VLT_pasture * consumption_factor]
 
 # Write the intermediate stuff to show the FAO flows by BEA code
 # Foreign production and trade of crops
-fwrite(production_crops_trade, '/nfs/qread-data/cfs_io_analysis/fao_production_trade_crops.csv')
-fwrite(prod_animal_joined_trade, '/nfs/qread-data/cfs_io_analysis/fao_production_trade_animals.csv')
+fwrite(production_crops_trade, file.path(intermediate_output_path, 'fao_production_trade_crops.csv'))
+fwrite(prod_animal_joined_trade, file.path(intermediate_output_path, 'fao_production_trade_animals.csv'))
 
 # Just write the very basic outputs
 VLT_sums_crop[, crop_type := paste0('VLT_', crop_type)]
 VLT_sums_crop <- dcast(VLT_sums_crop, scenario + country_code + country_name ~ crop_type, fill = 0)
 
 # Write VLT sums for crop and animal separately
-fwrite(production_crops_trade_by_scenario, '/nfs/qread-data/cfs_io_analysis/fao_VLT_provisional_crops_disaggregated.csv')
-fwrite(VLT_sums_crop, '/nfs/qread-data/cfs_io_analysis/fao_VLT_provisional_croponly.csv')
-fwrite(VLT_sums_animal, '/nfs/qread-data/cfs_io_analysis/fao_VLT_provisional_animalonly.csv')
+fwrite(production_crops_trade_by_scenario, file.path(intermediate_output_path, 'fao_VLT_provisional_crops_disaggregated.csv'))
+fwrite(VLT_sums_crop, file.path(intermediate_output_path, 'fao_VLT_provisional_croponly.csv'))
+fwrite(VLT_sums_animal, file.path(intermediate_output_path, 'fao_VLT_provisional_animalonly.csv'))
 
 VLT_sums_animal_overall <- VLT_sums_animal[, lapply(.SD, sum, na.rm = TRUE), by = .(scenario, country_code, country_name), .SDcols = patterns('VLT')]
 
@@ -463,5 +461,5 @@ VLT_all <- VLT_all[, .(scenario, country_code, country_name, VLT_annual, VLT_mix
 
 replace_na_dt(VLT_all, cols = grep('VLT', names(VLT_all), value = TRUE), replace_with = 0)
 
-fwrite(VLT_all, '/nfs/qread-data/cfs_io_analysis/fao_VLT_provisional.csv')
+fwrite(VLT_all, file.path(intermediate_output_path, 'fao_VLT_provisional.csv'))
 

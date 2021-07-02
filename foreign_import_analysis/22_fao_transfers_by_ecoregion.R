@@ -9,13 +9,9 @@
 library(data.table)
 library(Rutilitybelt)
 
-fp_out <- 'data/cfs_io_analysis'
-fp_eco <- 'data/raw_data/landuse/ecoregions'
-fp_csvs <- 'data/raw_data/landuse/output_csvs'
-
 # Read the tabulated counts of crop and pasture by country x TNC
-count_cropd <- fread(file.path(fp_csvs, 'global_count_cropdominance.csv'))
-count_pasture <- fread(file.path(fp_csvs, 'global_count_pasture.csv'))
+count_cropd <- fread(file.path(spatial_output_path, 'global_count_cropdominance.csv'))
+count_pasture <- fread(file.path(spatial_output_path, 'global_count_pasture.csv'))
 
 # Extract the useful information from the cropland summaries
 # Use crop dominance. Conservative estimate by excluding the minor fragment pixels. 
@@ -24,7 +20,7 @@ count_pasture <- fread(file.path(fp_csvs, 'global_count_pasture.csv'))
 count_cropd <- count_cropd[, crop_sum := rowSums(count_cropd[,c(as.character(1:7))], na.rm = TRUE)]
 
 # Read the land transfers by FAO
-fao_vlt <- fread(file.path(fp_out, 'fao_VLT_provisional.csv'))
+fao_vlt <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional.csv'))
 
 # Remove zero VLT countries
 fao_vlt[, VLT_sum := rowSums(.SD, na.rm = TRUE), .SDcols = patterns('VLT_')]
@@ -85,5 +81,5 @@ foreign_vlt_eco_sum <- foreign_vlt_eco[, lapply(.SD, sum),
                                        .SDcols = patterns('region|pasture_area|crop_area')]
 
 
-fwrite(foreign_vlt_eco, file.path(fp_out, 'foreign_VLT_by_country_x_TNC.csv'))
-fwrite(foreign_vlt_eco_sum, file.path(fp_out, 'foreign_VLT_by_TNC.csv'))
+fwrite(foreign_vlt_eco, file.path(final_output_path, 'foreign_VLT_by_country_x_TNC.csv'))
+fwrite(foreign_vlt_eco_sum, file.path(final_output_path, 'foreign_VLT_by_TNC.csv'))

@@ -10,9 +10,9 @@ library(Rutilitybelt)
 
 # Read foreign VLT imports by ecoregion and income by county used to split up the VLT by recipient county.
 
-foreign_vlt_eco <- fread('data/cfs_io_analysis/foreign_VLT_by_TNC.csv')
+foreign_vlt_eco <- fread(file.path(final_output_path, 'foreign_VLT_by_TNC.csv'))
 
-county_income <- read_csv('data/raw_data/BEA/countypersonalincome2012.csv', skip = 4, n_max = 3138, col_types = 'ccn', na = '(NA)') 
+county_income <- read_csv(file.path(data_path, 'BEA/countypersonalincome2012.csv'), skip = 4, n_max = 3138, col_types = 'ccn', na = '(NA)') 
 county_income$`2012`[county_income$GeoFips == '02010'] <- sum(county_income$`2012`[county_income$GeoFips %in% c('02013', '02016')]) #Aleutians correction
 county_income <- county_income %>%
   filter(!is.na(`2012`), !GeoFips %in% c('02013', '02016'))
@@ -52,5 +52,5 @@ foreign_vlt_counties <- foreign_vlt_eco_counties[, lapply(.SD, sum, na.rm = TRUE
 # NOTE: all foreign VLT are in hectares, later must be converted to m^2 by multiplying by 1e4
 
 # Write output
-fwrite(foreign_vlt_eco_counties, 'data/cfs_io_analysis/foreign_VLT_by_TNC_x_county.csv')
-fwrite(foreign_vlt_counties, 'data/cfs_io_analysis/foreign_VLT_to_counties.csv')
+fwrite(foreign_vlt_eco_counties, file.path(final_output_path, 'foreign_VLT_by_TNC_x_county.csv'))
+fwrite(foreign_vlt_counties, file.path(final_output_path, 'foreign_VLT_to_counties.csv'))

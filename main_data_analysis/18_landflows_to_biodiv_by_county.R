@@ -19,7 +19,7 @@ library(data.table)
 library(rslurm)
 
 # Updated characterization factors from Chaudhary and Brooks 2018
-chaudsi2018 <- fread(file.path(data_path, 'Chaudhary_Brooks_2018/chaud2018si_CFs.csv'), colClasses = rep(c('character', 'double'), c(9, 1)))
+chaudsi2018 <- fread(file.path(intermediate_output_path, 'chaud2018si_CFs.csv'), colClasses = rep(c('character', 'double'), c(9, 1)))
 
 # Process Chaudhary 2018 CFs data in preparation for joining with VLT data
 # Plantation = permanent cropland, Crop = annual cropland

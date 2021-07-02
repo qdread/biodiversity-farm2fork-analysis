@@ -2,9 +2,8 @@
 # QDR / Virtualland / 30 Sep 2020
 
 library(tidyverse)
-fp_fao <- '/nfs/qread-data/raw_data/FAOSTAT/31aug2020'
 
-fbs <- read_csv(file.path(fp_fao, "FoodBalanceSheets_E_All_Data_(Normalized).csv"))
+fbs <- read_csv(file.path(data_path, "FAOSTAT", "FoodBalanceSheets_E_All_Data_(Normalized).csv"))
 
 # Name repair of fbs
 fbs <- fbs %>% rename_with(function(x) gsub(' ', '_', tolower(x)))
@@ -18,7 +17,7 @@ fbs_avg_time <- fbs %>%
 
 # Lookup table to see which ones are an "item group," or aggregated category, versus individual.
 # Downloaded from http://www.fao.org/faostat/en/#data/BC/metadata (definitions sidebar > item group)
-item_grp_lookup <- read_csv('/nfs/qread-data/raw_data/FAOSTAT/faostat_item_group_lookup.csv') %>%
+item_grp_lookup <- read_csv(file.path(fp_crosswalk, 'faostat_item_group_lookup.csv')) %>%
   rename_with(function(x) gsub(' ', '_', tolower(x)))
 
 item_codes <- unique(fbs_avg_time[,c('item_code','item')])
@@ -68,7 +67,7 @@ fbs_agg_percapita_wide <- fbs_agg %>%
 
 # Save output
 
-fp_out <- '/nfs/qread-data/cfs_io_analysis/fao_fbs'
+fp_out <- file.path(intermediate_output_path, 'faostat_processed')
 
 write_csv(fbs_weights_wide, file.path(fp_out, 'fbs_indiv_weights_wide.csv'))
 write_csv(fbs_agg_weights_wide, file.path(fp_out, 'fbs_agg_weights_wide.csv'))

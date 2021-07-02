@@ -4,9 +4,8 @@
 # Load data ---------------------------------------------------------------
 
 library(tidyverse)
-fp_out <- 'data/cfs_io_analysis'
 
-nass_bea <- read_csv(file.path(fp_out, 'nass_workers_receipts_3landtypes_bea.csv'))
+nass_bea <- read_csv(file.path(intermediate_output_path, 'nass_workers_receipts_3landtypes_bea.csv'))
 
 # We need receipts per unit cropland and pastureland. Do this proportionally if a code has both crop and pastureland.
 # The input data is already split into annual vs permanent cropland, and mapped from the NASS NAICS classification to BEA
@@ -55,4 +54,4 @@ land_exch_tables <- nass_bea %>%
   select(-data)
 
 # Save to .RData object
-save(land_exch_tables, file = 'data/cfs_io_analysis/state_land_exchange_tables.RData')
+save(land_exch_tables, file = file.path(intermediate_output_path, 'state_land_exchange_tables.RData'))

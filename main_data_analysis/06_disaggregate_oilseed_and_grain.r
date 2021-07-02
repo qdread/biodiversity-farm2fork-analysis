@@ -5,7 +5,7 @@ library(tidyverse)
 # Read text file ---------------------------------------------------
 
 
-cdqt_file <- '/nfs/qread-data/raw_data/USDA/2012_cdqt_data.txt'
+cdqt_file <- file.path(data_path, 'NASS', '2012_cdqt_data.txt')
 
 cdqt <- read_delim(cdqt_file, delim = '\t', col_names = FALSE, col_types = strrep('c', 15))
 
@@ -144,7 +144,7 @@ crop_totals <- crop_totals %>%
 crop_totals %>% filter(!is.na(value), is.na(value_dollars)) %>% print(n=nrow(.)) # These are small specialty crops and don't make a big difference
 
 # Write this
-write_csv(crop_totals, file.path(fp_out, 'crop_totals_for_oilseeds_and_grains.csv'))
+write_csv(crop_totals, file.path(intermediate_output_path, 'crop_totals_for_oilseeds_and_grains.csv'))
 
 # Assign each row to either grains or oilseeds
 # Then sum up production by state and type
@@ -161,4 +161,4 @@ oilseed_grain_proportions <- oilseed_grain_totals %>%
          proportion_oilseed = oilseed / (grain + oilseed))
 
 # Write final proportion by state
-write_csv(oilseed_grain_proportions, file.path(fp_out, 'oilseed_grain_proportions.csv'))
+write_csv(oilseed_grain_proportions, file.path(intermediate_output_path, 'oilseed_grain_proportions.csv'))

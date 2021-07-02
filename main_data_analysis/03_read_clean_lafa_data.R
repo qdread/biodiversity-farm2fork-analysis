@@ -62,8 +62,7 @@ read_lafa_workbook <- function(file) {
 
 # Read data ---------------------------------------------------------------
 
-fp_lafa <- 'data/raw_data/USDA/LAFA'
-fp_crosswalk <- 'data/crossreference_tables'
+fp_lafa <- file.path(data_path, 'LAFA')
 
 dairy <- read_lafa_workbook(file.path(fp_lafa, 'Dairy.xls'))
 fat <- read_lafa_workbook(file.path(fp_lafa, 'fat.xls'))
@@ -165,4 +164,4 @@ lafa_df <- bind_rows(lafa_clean_names) %>%
 # Also, there is a double counted row, one is "White and whole wheat flour" and the other "Wheat flour" but they contain the same values
 lafa_df <- lafa_df %>% filter(!Category %in% c('Legumes', 'Wheat flour'))
 
-write_csv(lafa_df, 'data/cfs_io_analysis/lafa_cleaned.csv')
+write_csv(lafa_df, file.path(intermediate_output_path, 'lafa_cleaned.csv'))

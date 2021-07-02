@@ -6,13 +6,11 @@
 
 library(tidyverse)
 
-fp_diet <- 'data/raw_data/food_consumption/diet_guidelines'
-fp_crosswalk <- 'data/crossreference_tables'
-fp_out <- 'data/cfs_io_analysis'
+fp_diet <- file.path(data_path, 'dietary_guidelines')
 
 # LAFA data with the different scenario production factors calculated
-lafa_df <- read_csv(file.path(fp_out, 'lafa_with_production_factors_diet_x_waste.csv'))
-lafa_df_foreign <- read_csv(file.path(fp_out, 'lafa_with_production_factors_diet_x_waste_foreign.csv'))
+lafa_df <- read_csv(file.path(intermediate_output_path, 'lafa_with_production_factors_diet_x_waste.csv'))
+lafa_df_foreign <- read_csv(file.path(intermediate_output_path, 'lafa_with_production_factors_diet_x_waste_foreign.csv'))
 
 
 # Process lafa scenario input data ----------------------------------------
@@ -58,7 +56,7 @@ bea2lafa <- read_csv(file.path(fp_crosswalk, 'bea_lafa_crosswalk.csv'))
 bea2lafa <- bea2lafa %>% filter(!BEA_389_code %in% '114000')
 
 # Also load the QFAHPD data so that we can get the prices.
-qfahpd2 <- read_csv('~/foodwasteinterventions/data/intermediate_output/qfahpd2.csv')
+qfahpd2 <- read_csv(file.path(intermediate_output_path, 'qfahpd2.csv'))
 
 # Convert the comma-separated string columns to list columns.
 qfahpd2lafa <- qfahpd2lafa %>%
@@ -177,17 +175,18 @@ scenario_values_bea_notbeverage_foreign <- bea2lafa_notbeverage %>%
 # For waste scenarios, use the waste rates we compiled for the Stoten paper.
 # For diet scenarios, use the production factors for sugar for soft drinks and flavored drinks. For coffee, tea, and alcohol, assume unchanged with diet.
 
-stoten_waste_rates <- read_csv('~/halvingfoodwaste/data/flw_rates.csv') # Waste rates
-diet_lancet_proportion <- read_csv('data/cfs_io_analysis/proportion_diet_lancet.csv') # Diet proportions for planetary health
-diet_usa_proportion <- read_csv('data/cfs_io_analysis/proportion_diet_usaguidelines.csv') # Diet proportions for USA guidelines
+# Here include waste rates from Stoten paper directly.
+
+diet_lancet_proportion <- read_csv(file.path(intermediate_output_path, 'proportion_diet_lancet.csv')) # Diet proportions for planetary health
+diet_usa_proportion <- read_csv(file.path(intermediate_output_path, 'proportion_diet_usaguidelines.csv')) # Diet proportions for USA guidelines
 
 # Do similar computations as in waste_reduction_simulation.R but for the beverages, and all relative to baseline of 1.
-beverage_preconsumer_waste_rates <- as.numeric(stoten_waste_rates[stoten_waste_rates$category == 'beverages', c('loss_processing_packaging', 'loss_distribution')])
+beverage_preconsumer_waste_rates <- c(loss_processing_packaging = 0.045, loss_distribution = 0.050) # From our Sci. Tot. Env. paper.
 beverage_preconsumer_waste <-  1 - prod(1 - beverage_preconsumer_waste_rates) # Appx 9%
-beverage_consumer_waste <- as.numeric(stoten_waste_rates[stoten_waste_rates$category == 'beverages', c('loss_consumption')]) # 8%
+beverage_consumer_waste <- c(loss_consumption = 0.080) # 8%
 beverage_allavoidable_waste <- 1 - prod(1 - c(beverage_preconsumer_waste, beverage_consumer_waste)) # 16.5%
 
-beverage_preconsumer_waste_foreign <- as.numeric(stoten_waste_rates[stoten_waste_rates$category == 'beverages', c('loss_distribution')]) #5%
+beverage_preconsumer_waste_foreign <- beverage_preconsumer_waste_rates['loss_distribution'] #5%
 beverage_consumer_waste_foreign <- beverage_consumer_waste
 beverage_allavoidable_waste_foreign <- 1 - prod(1 - c(beverage_preconsumer_waste_foreign, beverage_consumer_waste_foreign)) #12.6%
 
@@ -269,5 +268,5 @@ scenario_values_bea_wide_foreign <- scenario_values_bea_foreign %>%
 scenario_factors_bea_foreign <- scenario_values_bea_wide_foreign %>%
   mutate(across(where(is.numeric), ~ ./D_baseline_WR_baseline))
 
-write_csv(scenario_factors_bea, 'data/cfs_io_analysis/bea_consumption_factors_diet_waste_scenarios.csv')
-write_csv(scenario_factors_bea_foreign, 'data/cfs_io_analysis/bea_consumption_factors_diet_waste_scenarios_foreign.csv')
+write_csv(scenario_factors_bea, file.path(intermediate_output_path, 'bea_consumption_factors_diet_waste_scenarios.csv'))
+write_csv(scenario_factors_bea_foreign, file.path(intermediate_output_path, 'bea_consumption_factors_diet_waste_scenarios_foreign.csv'))

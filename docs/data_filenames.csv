@@ -1,0 +1,33 @@
+Type,Dataset name,File path in archive,Description,Zip archive containing data
+Primary data,USEEIOv2.0-alpha input-output model,USEEIO2012v2.0/,"three .csv files and one .RData file (useeio2012v2.0_DRC.csv, useeio2012v2.0_DRCdomestic.csv, useeio2012v2.0_PCE.csv, useeiov2.0_pce_drc.RData)",all_other_data.zip
+Primary data,Census of Agriculture,NASS/,one fixed-width .txt file (2012_cdqt_data.txt),NASS.zip
+Primary data,County Business Patterns,CBP/,one comma-separated .txt file (cbp12co.txt),all_other_data.zip
+Primary data,Statistics of U.S. Businesses,SUSB/,one comma-separated .txt file (us_state_6digitnaics_2012.txt),all_other_data.zip
+Primary data,2015-2020 Dietary Guidelines,dietary_guidelines/,one .xlsx file (dietaryguidelines2020-2025cleaned.xlsx),all_other_data.zip
+Primary data,Planetary Health diet,dietary_guidelines/,one .csv file (lancet_planetary_health_diet.csv),all_other_data.zip
+Primary data,Loss-Adjusted Food Availability Data Series,LAFA/,nine .xls files (one file for each food group),all_other_data.zip
+Primary data,"Quarterly Food-at-home Price Database, version 2",QFAHPD/,ten .xls files (files for each food group and codebooks for QFAHPD1 and QFAHPD2),all_other_data.zip
+Primary data,FAOSTAT ,FAOSTAT/,nine .csv files (named using FAOSTAT's naming conventions),FAOSTAT.zip
+Primary data,U.S. County Personal Income,BEA/,one .csv file (countypersonalincome2012.csv),all_other_data.zip
+Primary data,Biodiversity characterization factors,Chaudhary_Brooks_2018/,one .xlsx file (chaudhary_brooks_2018_si.xlsx),all_other_data.zip
+Spatial data,The Nature Conservancy terrestrial ecoregions,tnc_terr_ecoregions/,ESRI Shapefile consisting of eight individual files,shapefiles.zip
+Spatial data,United States county boundaries shapefile,cb_2014_us_county_500k/,ESRI Shapefile consisting of eight individual files,shapefiles.zip
+Spatial data,Global country administrative boundaries shapefile,ne_50m_admin_0_countries/,ESRI Shapefile consisting of eight individual files,shapefiles.zip
+Spatial data,"National Land Cover Database 2016, CONUS",NLCD_L48/,".ige, .img, .rde, .rrd, and .xml files",NLCD_L48.zip
+Spatial data,"National Land Cover Database 2016, Alaska",NLCD_AK/," .ige, .img, and .xml files",NLCD_AK.zip
+Spatial data,"NOAA Land Cover Dataset 2001, Hawaii",NLCD_HI/,.img and .rrd files,NLCD_HI.zip
+Spatial data,Global Agricultural Lands: Pastures v1,global_cropland/,one .tif file with associated .aux and .tif.xml files (pasture.tif),other_raster_data.zip
+Spatial data,Crop Dominance 2010 Global 1 km,global_cropland/,one .tif file with associated .tif.xml file (GFSAD1KCD.2010.001.2016348142525.tif),other_raster_data.zip
+Spatial data,"U.S. Census Grids: Summary File 1, v1",population_grids/,"four .tif files (akpop10.tif, ehpop10.tif, hipop10.tif, uspop10.tif)",other_raster_data.zip
+Crosswalk,FIPS codes harmonization between Census Tiger shapefile and county personal income data,crossreference_tables/,one .csv file (fips_harmonization.csv),all_other_data.zip
+Crosswalk,Weight in pounds per bushel of grain and oilseed crops,crossreference_tables/,one .csv file (wt_per_bushel.csv),all_other_data.zip
+Crosswalk,Price per bushel or hundredweight of grain and oilseed crops in 2014-2016,crossreference_tables/,one .csv file (crop_priceperunit_20142016.csv),all_other_data.zip
+Crosswalk,FAOSTAT category hierarchical structure,crossreference_tables/,one .csv file (faostat_item_group_lookup.csv),all_other_data.zip
+Crosswalk,NAICS codes to BEA codes,USEEIO2012v2.0/,one .csv file (useeio2012v2.0_NAICS_BEA_crosswalk.csv),all_other_data.zip
+Crosswalk,LAFA food categories to Lancet and USDA dietary guidelines food groups,crossreference_tables/,one .csv file (lafa_dietary_guidelines_crosswalk.csv),all_other_data.zip
+Crosswalk,FAOSTAT commodity codes in trade dataset to FAOSTAT commodity codes in production dataset,crossreference_tables/,one .csv file (faostat_all_codes_harmonized.csv),all_other_data.zip
+Crosswalk,FAOSTAT commodity codes to FAO food balance sheet commodity codes,crossreference_tables/,one .csv file (fao_prodcodes_harmonized_fbs.csv),all_other_data.zip
+Crosswalk,QFAHPD food categories to LAFA food categories,crossreference_tables/,one .csv file (qfahpd_lafa_crosswalk.csv),all_other_data.zip
+Crosswalk,LAFA food categories to QFAHPD food categories to BEA codes,crossreference_tables/,one .csv file (lafa_qfahpd_naics_crosswalk.csv),all_other_data.zip
+Crosswalk,LAFA category hierarchical structure,crossreference_tables/,one .csv file (lafa_category_structure.csv),all_other_data.zip
+Crosswalk,BEA codes to LAFA food categories,crossreference_tables/,one .csv file (bea_lafa_crosswalk.csv),all_other_data.zip

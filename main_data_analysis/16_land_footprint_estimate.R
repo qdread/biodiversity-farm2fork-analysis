@@ -16,10 +16,8 @@ library(data.table)
 library(tidyverse)
 library(Rutilitybelt)
 
-fp_out <- 'data/cfs_io_analysis'
-
 # Load land_exch_tables
-load(file.path(fp_out, 'state_land_exchange_tables.RData'))
+load(file.path(intermediate_output_path, 'state_land_exchange_tables.RData'))
 
 # Loop through scenarios and get land consumption -------------------------
 
@@ -27,7 +25,7 @@ load(file.path(fp_out, 'state_land_exchange_tables.RData'))
 # Define function to do this for a single scenario.
 land_consumption_by_scenario <- function(diet, waste) {
   
-  consumption <- fread(glue::glue('/nfs/qread-data/cfs_io_analysis/county_consumption_csvs/D_{diet}_WR_{waste}_wide.csv'),
+  consumption <- fread(glue::glue('{intermediate_output_path}/county_consumption_csvs/D_{diet}_WR_{waste}_wide.csv'),
                        colClasses = rep(c('character','double'), c(3, 3112)))
   
   # Pivot consumption matrix to long form
@@ -59,7 +57,7 @@ land_consumption_by_scenario <- function(diet, waste) {
   land_consumption <- consumption_vectors[, .(scenario, county_to, state_from, county_from, land_consumption)]
   land_consumption <- unnest_dt(land_consumption, col = land_consumption, id = .(scenario, county_to, state_from, county_from))
 
-  fwrite(land_consumption, glue::glue('/nfs/qread-data/cfs_io_analysis/county_land_consumption_csvs/D_{diet}_WR_{waste}_landconsumption.csv'))
+  fwrite(land_consumption, glue::glue('{intermediate_output_path}/county_land_consumption_csvs/D_{diet}_WR_{waste}_landconsumption.csv'))
 }
 
 scenario_combos <- expand_grid(diet = c('baseline','planetaryhealth','usstyle','medstyle','vegetarian'),

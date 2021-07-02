@@ -5,13 +5,12 @@
 # Correct for missing values and for the Alaskan county code
 
 library(data.table)
-fp_out <- 'data/cfs_io_analysis'
 
 # NLCD pixel counts by the intersection of county and TNC region in the USA
-nlcd_county_tnc <- fread(file.path(fp_out, 'NLCDcrop_county_x_TNC.csv'), colClasses = rep(c('character', 'integer'), c(2, 4)))
+nlcd_county_tnc <- fread(file.path(spatial_output_path, 'NLCDcrop_county_x_TNC.csv'), colClasses = rep(c('character', 'integer'), c(2, 4)))
 
 # Population counts by the intersection of county and TNC region in the USA
-pop_county_tnc <- fread(file.path(fp_out, 'population_county_x_TNC_longform.csv'), colClasses = rep(c('character', 'double'), c(3, 1)))
+pop_county_tnc <- fread(file.path(spatial_output_path, 'population_county_x_TNC_longform.csv'), colClasses = rep(c('character', 'double'), c(3, 1)))
 
 
 # Process weighting factors -----------------------------------------------
@@ -37,7 +36,7 @@ county_flows_to_tnc_flows <- function(diet, waste) {
   
   # Calculate flows from ecoregion to county 
   
-  flows <- fread(glue::glue('/nfs/qread-data/cfs_io_analysis/county_land_consumption_csvs/D_{diet}_WR_{waste}_landconsumption.csv'), colClasses = rep(c('character', 'double'), c(5, 1)))
+  flows <- fread(glue::glue('{intermediate_output_path}/county_land_consumption_csvs/D_{diet}_WR_{waste}_landconsumption.csv'), colClasses = rep(c('character', 'double'), c(5, 1)))
   
   flows[, land_type := gsub('_exchange', '', land_type)][, state_from := NULL]
         
@@ -58,7 +57,7 @@ county_flows_to_tnc_flows <- function(diet, waste) {
   
   # Write this one to CSV (county flows weighted by TNC). It will be pretty big
   fwrite(flows[, .(scenario, county_from, county_to, TNC_from, annual_cropland, permanent_cropland, pastureland)],
-         glue::glue('/nfs/qread-data/cfs_io_analysis/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_county_x_county_landtncweights.csv'))
+         glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_county_x_county_landtncweights.csv'))
 
   # Then, sum grouped by target county and originating ecoregion
   
@@ -68,7 +67,7 @@ county_flows_to_tnc_flows <- function(diet, waste) {
     , setnames(.SD, land_cols, flow_cols)]
 
   # Save totals to CSV
-  fwrite(flows_tnc_to_county, glue::glue('/nfs/qread-data/cfs_io_analysis/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_county.csv'))
+  fwrite(flows_tnc_to_county, glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_county.csv'))
   
   # Use population weights to get TNC x TNC transfers 
   
@@ -85,7 +84,7 @@ county_flows_to_tnc_flows <- function(diet, waste) {
   flows_tnc_agg <- flows_tnc_pop[, lapply(.SD, sum, na.rm = TRUE), by = .(scenario, TNC_from, TNC_to), .SDcols = flow_cols]
 
   # Save outputs to CSVs
-  fwrite(flows_tnc_agg, glue::glue('/nfs/qread-data/cfs_io_analysis/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_tnc.csv'))
+  fwrite(flows_tnc_agg, glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_tnc.csv'))
 }
 
 
@@ -106,6 +105,6 @@ cleanup_files(sjob_convertflows)
 
 # Combine ecoregion flows into single file --------------------------------
 
-flows_tnc_all <- purrr::pmap_dfr(scenario_combos, function(diet, waste) fread(glue::glue('{fp_out}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_tnc.csv')))
+flows_tnc_all <- purrr::pmap_dfr(scenario_combos, function(diet, waste) fread(glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_tnc.csv')))
 
-fwrite(flows_tnc_all, file.path(fp_out, 'scenarios/landflows_tnc_x_tnc_all_scenarios.csv'))
+fwrite(flows_tnc_all, file.path(final_output_path, 'landflows_tnc_x_tnc_all_scenarios.csv'))

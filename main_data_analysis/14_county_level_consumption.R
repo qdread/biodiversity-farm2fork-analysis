@@ -15,18 +15,18 @@
 # Combine Aleutians east and west into a single data point.
 library(tidyverse)
 
-county_income <- read_csv('data/raw_data/BEA/countypersonalincome2012.csv', skip = 4, n_max = 3138, col_types = 'ccn', na = '(NA)') 
+county_income <- read_csv(file.path(data_path, 'BEA/countypersonalincome2012.csv'), skip = 4, n_max = 3138, col_types = 'ccn', na = '(NA)') 
 county_income$`2012`[county_income$GeoFips == '02010'] <- sum(county_income$`2012`[county_income$GeoFips %in% c('02013', '02016')]) #Aleutians correction
 county_income <- county_income %>%
   filter(!is.na(`2012`), !GeoFips %in% c('02013', '02016'))
 
 # Load the personal consumption expenditure for each good, and the DRC tables, extracted from USEEIO2012v2.0
-load('data/cfs_io_analysis/useeio2012v2.0_pce_drc.RData')
+load(file.path(data_path, 'USEEIO2012v2.0', 'useeio2012v2.0_pce_drc.RData'))
 
 # Alternative scenarios ---------------------------------------------------
 
 # Get multiplicative factors for each of the alternative scenarios
-scenario_factors_bea <- read_csv('data/cfs_io_analysis/bea_consumption_factors_diet_waste_scenarios.csv')
+scenario_factors_bea <- read_csv(file.path(intermediate_output_path, 'bea_consumption_factors_diet_waste_scenarios.csv'))
 
 # Multiply the appropriate BEA code by its production factor for each scenario.
 # Only the 35 food BEA codes will be multiplied, so create an expanded vector for each scenario with 0 in all other elements.
@@ -63,7 +63,7 @@ county_consumption2012_df <- county_consumption2012 %>%
 
 county_consumption2012_df <- tibble(BEA_code = rep(names(pce2012), nrow(county_consumption2012)), county_consumption2012_df)
 
-write_csv(county_consumption2012_df, 'data/cfs_io_analysis/county_consumption2012_allscenarios.csv')
+write_csv(county_consumption2012_df, file.path(final_output_path, 'county_consumption2012_allscenarios.csv'))
 
 
 # Direct and indirect demand resulting from consumer expenditures ---------
@@ -116,4 +116,4 @@ county_totaldemand2012_aquaculture_corrected <- county_totaldemand2012_long %>%
   select(-fish_demand_base, -fish_demand_increase) %>%
   pivot_wider(names_from = county, values_from = demand)
 
-write_csv(county_totaldemand2012_aquaculture_corrected, 'data/cfs_io_analysis/county_totaldemand2012_allscenarios.csv')
+write_csv(county_totaldemand2012_aquaculture_corrected, file.path(final_output_path, 'county_totaldemand2012_allscenarios.csv'))

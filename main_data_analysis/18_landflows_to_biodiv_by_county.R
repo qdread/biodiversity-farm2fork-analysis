@@ -19,7 +19,7 @@ library(data.table)
 library(rslurm)
 
 # Updated characterization factors from Chaudhary and Brooks 2018
-chaudsi2018 <- fread('data/raw_data/biodiversity/chaudhary2015SI/chaud2018si_CFs.csv', colClasses = rep(c('character', 'double'), c(9, 1)))
+chaudsi2018 <- fread(file.path(data_path, 'Chaudhary_Brooks_2018/chaud2018si_CFs.csv'), colClasses = rep(c('character', 'double'), c(9, 1)))
 
 # Process Chaudhary 2018 CFs data in preparation for joining with VLT data
 # Plantation = permanent cropland, Crop = annual cropland
@@ -36,7 +36,7 @@ chaudsi_processed <- chaudsi_processed[intensity %in% 'med' & CF_type %in% 'occu
 
 extinctions_by_scenario <- function(diet, waste) {
   # Read VLT values for scenario
-  VLT <- fread(glue::glue('/nfs/qread-data/cfs_io_analysis/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_county_x_county_landtncweights.csv'), 
+  VLT <- fread(glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_county_x_county_landtncweights.csv'), 
                colClasses = rep(c('character', 'double'), c(4, 3)))
   
   # Join land transfers and characterization factors
@@ -71,8 +71,8 @@ extinctions_by_scenario <- function(diet, waste) {
   county_flows <- county_outbound[county_inbound, on = .(scenario, county, land_use, taxon)]
   county_flows[is.na(extinction_outbound), extinction_outbound := 0]
 
-  fwrite(extinctions_state, glue::glue('/nfs/qread-data/cfs_io_analysis/county_state_extinction_csvs/D_{diet}_WR_{waste}_state_x_state_extinctions.csv'))
-  fwrite(county_flows, glue::glue('/nfs/qread-data/cfs_io_analysis/county_state_extinction_csvs/D_{diet}_WR_{waste}_county_extinction_sums.csv'))
+  fwrite(extinctions_state, glue::glue('{intermediate_output_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_state_x_state_extinctions.csv'))
+  fwrite(county_flows, glue::glue('{intermediate_output_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_county_extinction_sums.csv'))
   
 }
 
@@ -92,9 +92,9 @@ cleanup_files(sjob_extinctions)
 
 # Load and concatenate and write ------------------------------------------
 
-extinctions_state_all <- purrr::pmap_dfr(scenario_combos, function(diet, waste) fread(glue::glue('/nfs/qread-data/cfs_io_analysis/county_state_extinction_csvs/D_{diet}_WR_{waste}_state_x_state_extinctions.csv'), colClasses = rep(c('character', 'double'), c(5, 1))))
-county_flows_all <- purrr::pmap_dfr(scenario_combos, function(diet, waste) fread(glue::glue('/nfs/qread-data/cfs_io_analysis/county_state_extinction_csvs/D_{diet}_WR_{waste}_county_extinction_sums.csv'), colClasses = rep(c('character', 'double'), c(4, 2))))
+extinctions_state_all <- purrr::pmap_dfr(scenario_combos, function(diet, waste) fread(glue::glue('{intermediate_output_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_state_x_state_extinctions.csv'), colClasses = rep(c('character', 'double'), c(5, 1))))
+county_flows_all <- purrr::pmap_dfr(scenario_combos, function(diet, waste) fread(glue::glue('{intermediate_output_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_county_extinction_sums.csv'), colClasses = rep(c('character', 'double'), c(4, 2))))
 
-fwrite(extinctions_state_all, '/nfs/qread-data/cfs_io_analysis/scenarios/species_lost_state_x_state_all_scenarios_med.csv')
-fwrite(county_flows_all, '/nfs/qread-data/cfs_io_analysis/scenarios/species_lost_county_sums_all_scenarios_med.csv')
+fwrite(extinctions_state_all, file.path(final_output_path, 'species_lost_state_x_state_all_scenarios_med.csv'))
+fwrite(county_flows_all, file.path(final_output_path, 'species_lost_county_sums_all_scenarios_med.csv'))
 

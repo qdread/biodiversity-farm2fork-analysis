@@ -216,7 +216,7 @@ The following table contains the data sources used in the manuscript, along with
 
 ```{r}
 library(dplyr)
-datasources <- read_xlsx('~/virtualland/TableS1_datasources.xlsx')
+datasources <- read_xlsx('docs/supp_table_datasources.xlsx')
 
 datasources <- datasources %>%
   mutate(`Data year(s)` = if_else(`Data year(s)` == '-', as.character(NA), `Data year(s)`),
@@ -287,7 +287,7 @@ kbl(datasources[, -c(1)], booktabs = TRUE, longtable = TRUE, escape = FALSE, lin
 The following table contains the commodity names and six-character codes from the U.S. Bureau of Economic Analysis input-output tables used in our analysis. Thirty-seven commodities are shown, including both primary agricultural goods (codes beginning with `1`) and processed foods (codes beginning with `3`).
 
 ```{r}
-foodcat <- read_xlsx('~/virtualland/foodcategorytable.xlsx')
+foodcat <- read_xlsx('docs/supp_table_foodcategories.xlsx')
 
 kbl(foodcat[,1:2], booktabs = TRUE) %>%
   pack_rows('primary agricultural goods', 1, 11, background = "#D4EBF2") %>%

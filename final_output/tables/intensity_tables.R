@@ -4,8 +4,8 @@
 
 # Generate summary table --------------------------------------------------
 
-# We need total VLT and total VBT by land use type and by taxon, possibly disaggregated to domestic and foreign.
-# Generate data in figs_v2_foreign.R to line 101; create all_vlt_sum and all_extinction_sum
+source('figs/load_data_all_figs.R')
+source('figs/load_data_foreign_maps.R')
 
 all_extinction_base <- all_extinction_sum[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']
 all_extinction_base_total <- all_extinction_base[, .(extinctions = sum(extinctions)), by = .(land_use, origin)]

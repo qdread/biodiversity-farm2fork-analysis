@@ -1,6 +1,6 @@
 # Biodiversity: Farm2Fork
 
-Code to reproduce all analysis presented in the manuscript **Biodiversity effects of food system sustainability actions from farm to fork**, and the data for the associated Shiny app (put link to app here when complete).
+Code to reproduce all analysis presented in the manuscript **Biodiversity effects of food system sustainability actions from farm to fork**, and the data for the associated Shiny app ([temporary link](https://shiny.sesync.org/apps/bioiversity-farm2fork)).
 
 **Citation (to be updated when final)**: Read, Quentin D., Kelly L. Hondula, and Mary K. Muth. Biodiversity effects of food system sustainability actions from farm to fork. *PNAS*, in preparation.
 
@@ -8,9 +8,13 @@ Code to reproduce all analysis presented in the manuscript **Biodiversity effect
 
 The code is organized into subdirectories containing numbered scripts. To reproduce all the analysis presented in the manuscript, the scripts should be run in order.
 
+### Setting file paths
+
+The script `00_set_file_paths.R` in the root directory of this repository should be run first. This sets up file paths pointing to the code and raw data, and a path where the intermediate and final outputs will be saved.
+
 ### Spatial data processing
 
-The `spatial_data_processing` subdirectory contains an RMarkdown notebook, `01_spatial_processing.Rmd` that should be run first. There are also several Bash and Python scripts that are necessary to run the code in the notebook.
+The `spatial_data_processing` subdirectory contains an RMarkdown notebook, `01_spatial_processing.Rmd`. Running the code in this notebook will do all the processing of spatial data required for the analysis. There are also several Bash and Python scripts that are necessary to run the code in the notebook.
 
 ### Main data analysis pipeline
 
@@ -32,12 +36,10 @@ After running those scripts, scripts to produce the visualizations are found in 
 
 ## Availability of data
 
-The raw data are archived in (location to be determined).
+The raw data are archived on a [Figshare repository](https://doi.org/10.6084/m9.figshare.14892087).
 
-Some files are included as compressed `.tar.gz` files and will need to be decompressed before running the code:
+All the data on the Figshare repository are included as compressed `.zip` files and will need to be decompressed before running the code. If all the `.zip` files are extracted into the same root directory, this will maintain the file tree structure used in the code.
 
-- The NLCD 30m land cover for the contiguous USA, Alaska, and Hawaii
-- All raw FAOSTAT data files
-- The USDA NASS 2012 Census of Agriculture data file
+The file names and paths to the data within the archive are listed in this repository `docs/data_filenames.csv`.
 
 *last modified by QDR, 30 June 2021*

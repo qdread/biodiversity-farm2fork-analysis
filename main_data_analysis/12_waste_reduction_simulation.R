@@ -6,11 +6,9 @@
 
 library(tidyverse)
 
-fp_diet <- 'data/raw_data/food_consumption/diet_guidelines'
-fp_crosswalk <- 'data/crossreference_tables'
-fp_out <- 'data/cfs_io_analysis'
+fp_diet <- file.path(data_path, 'dietary_guidelines')
 
-lafa_df_joindiets <- read_csv(file.path(fp_out, 'lafa_joined_with_diet_proportions.csv'))
+lafa_df_joindiets <- read_csv(file.path(intermediate_output_path, 'lafa_joined_with_diet_proportions.csv'))
 
 # Where are values missing? Looks like only in a few minor canned fruit categories. Replace zeroes where needed.
 lafa_df_joindiets %>% select("Category", "Group", starts_with("loss")) %>% filter(!complete.cases(.))
@@ -67,7 +65,7 @@ for (i in 1:nrow(cols_df)) {
 }
 
 # Write the data frame with all production factors to CSV
-write_csv(lafa_df_joindiets, file.path(fp_out, 'lafa_with_production_factors_diet_x_waste.csv'))
+write_csv(lafa_df_joindiets, file.path(intermediate_output_path, 'lafa_with_production_factors_diet_x_waste.csv'))
 
 
 # Added 22 March: separate set of factors for foreign imports -------------
@@ -75,7 +73,7 @@ write_csv(lafa_df_joindiets, file.path(fp_out, 'lafa_with_production_factors_die
 # In the case of foreign imports, we will not assume any reduction in primary waste for the pre-consumer and all-avoidable waste reduction scenarios.
 # Instead, we will only assume retail waste is reduced.
 
-lafa_df_joindiets <- read_csv(file.path(fp_out, 'lafa_joined_with_diet_proportions.csv'))
+lafa_df_joindiets <- read_csv(file.path(intermediate_output_path, 'lafa_joined_with_diet_proportions.csv'))
 
 # Where are values missing? Looks like only in a few minor canned fruit categories. Replace zeroes where needed.
 lafa_df_joindiets %>% select("Category", "Group", starts_with("loss")) %>% filter(!complete.cases(.))
@@ -132,4 +130,4 @@ for (i in 1:nrow(cols_df)) {
 }
 
 # Write the data frame with all production factors to CSV
-write_csv(lafa_df_joindiets, file.path(fp_out, 'lafa_with_production_factors_diet_x_waste_foreign.csv'))
+write_csv(lafa_df_joindiets, file.path(intermediate_output_path, 'lafa_with_production_factors_diet_x_waste_foreign.csv'))

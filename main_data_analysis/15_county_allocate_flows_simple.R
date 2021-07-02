@@ -8,12 +8,10 @@
 
 library(tidyverse)
 
-fp_out <- 'data/cfs_io_analysis'
-
 # Consumption data for all scenarios (2012)
-county_consumption <- read_csv(file.path(fp_out, 'county_totaldemand2012_allscenarios.csv'))
+county_consumption <- read_csv(file.path(final_output_path, 'county_totaldemand2012_allscenarios.csv'))
 # Production downscaled (2012)
-county_production <- read_csv(file.path(fp_out, 'county_production2012.csv'))
+county_production <- read_csv(file.path(intermediate_output_path, 'county_production2012.csv'))
 
 # Get vector of primary agricultural goods.
 bea_codes <- unique(county_consumption$BEA_code)
@@ -50,7 +48,7 @@ cons_unmatched <- setdiff(y = county_production_ag$county_fips, x = county_consu
 # We have 23 counties in Virginia which were merged with an independent city they contain, and renamed. 
 # In all cases it is a one to one correspondence so we can use our harmonization crosswalk to rename.
 
-fips_harmonization <- read_csv('data/crossreference_tables/fips_harmonization.csv')
+fips_harmonization <- read_csv(file.path(fp_crosswalk, 'fips_harmonization.csv'))
 fips_tojoin <- fips_harmonization %>%
   filter(grepl('^15', FIPS_data) | grepl('^51', FIPS_data)) %>% # keep VA and HI
   select(FIPS_data, FIPS_map1) %>%
@@ -100,18 +98,5 @@ county_consumption_allocated_wide_df <- county_consumption_allocated_wide %>%
 county_consumption_allocated_wide_df %>%
   ungroup %>%
   group_split(scenario, .keep = TRUE) %>%
-  walk(~ write_csv(., file.path(fp_out, 'county_consumption_csvs', paste0(.$scenario[1], '_wide.csv'))))
+  walk(~ write_csv(., file.path(intermediate_output_path, 'county_consumption_csvs', paste0(.$scenario[1], '_wide.csv'))))
 
-# Do not run the following code as longform takes up at least 3x disk space of wideform.  
-# Pivot to longform and write to CSVs as well (to facilitate later reading)
-# pivot_long_write <- function(dat) {
-#   dat_long <- dat %>% 
-#     pivot_longer(-c(BEA_code, scenario, county_fips), values_to = 'consumption', names_to = 'county_to') %>%
-#     rename(county_from = county_fips)
-#   write_csv(dat_long, file.path(fp_out, 'county_consumption_csvs', paste0(dat_long$scenario[1], '_long.csv')))
-# }
-# 
-# county_consumption_allocated_wide_df %>%
-#   ungroup %>%
-#   group_split(scenario, .keep = TRUE) %>%
-#   walk(pivot_long_write)

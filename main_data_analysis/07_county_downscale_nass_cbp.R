@@ -7,14 +7,12 @@
 
 library(tidyverse)
 
-fp_out <- 'data/cfs_io_analysis'
-
 # Read crosswalk from USEEIO that maps NAICS 12 to the BEA codes
-bea_naics <- read_csv(file.path(fp_out, 'useeio2012v2.0_NAICS_BEA_crosswalk.csv'))
+bea_naics <- read_csv(file.path(intermediate_output_path, 'useeio2012v2.0_NAICS_BEA_crosswalk.csv'))
 
 # Read text file ---------------------------------------------------
 
-cdqt_file <- 'data/raw_data/USDA/2012_cdqt_data.txt'
+cdqt_file <- file.path(data_path, 'NASS', '2012_cdqt_data.txt')
 
 # Columns are delimited by tabs? Probably
 # Read all as characters to begin with.
@@ -37,13 +35,13 @@ cdqt_county_noperations <- cdqt_county_noperations %>%
   mutate(NAICS = gsub('NAICS CLASSIFICATION: ', '', NAICS),
          NAICS = gsub('\\(|\\)', '', NAICS))
 
-write_csv(cdqt_county_noperations, file.path(fp_out, 'forcountydownscale_nass_n_operations.csv'))
+write_csv(cdqt_county_noperations, file.path(intermediate_output_path, 'forcountydownscale_nass_n_operations.csv'))
 
 # CBP county level data ---------------------------------------------------
 
 # Use this for non-agricultural codes.
 
-cbp12co <- read_csv('data/raw_data/Census/CBP/cbp12co.txt')
+cbp12co <- read_csv(file.path(data_path, 'CBP/cbp12co.txt'))
 
 ### Use CBP for the other non-agricultural codes
 # Variables: empflag shows if data are withheld, emp_nf is employee noise flag, emp is total employees, qp1 is quarter 1 payroll. ap is annual payroll, est is number of establishments and then the number of establishments with different numbers of employees.
@@ -202,7 +200,7 @@ cbp_nass_county_bea <- cbp_nass_county_bea %>%
   filter(!(state_fips %in% '51' & county_fips %in% c('019', '515'))) %>%
   bind_rows(bedford_joined)
 
-write_csv(cbp_nass_county_bea, file.path(fp_out, 'county_weightings_for_downscale.csv'))
+write_csv(cbp_nass_county_bea, file.path(intermediate_output_path, 'county_weightings_for_downscale.csv'))
 
 
 # NASS and SUSB by state --------------------------------------------------
@@ -326,13 +324,13 @@ cdqt_naics_withimp <- cdqt_naics_withimp %>%
 nass_naics <- cdqt_naics_withimp %>%
   arrange(NAICS, state_fips)
 
-write_csv(nass_naics, '/nfs/qread-data/cfs_io_analysis/NASS2012_receipts_workers_land_NAICS_imputed.csv')
+write_csv(nass_naics, file.path(intermediate_output_path, '/nfs/qread-data/cfs_io_analysis/NASS2012_receipts_workers_land_NAICS_imputed.csv'))
 
 
 # Map state NAICS NASS and SUSB to BEA ------------------------------------
 
 # Read SUSB data for all other NAICS codes besides primary agg.
-susb12 <- read_csv('data/raw_data/Census/SUSB/us_state_6digitnaics_2012.txt', col_types = 'fffnnnffnfnfccc') 
+susb12 <- read_csv(file.path(data_path, 'SUSB/us_state_6digitnaics_2012.txt'), col_types = 'fffnnnffnfnfccc') 
 susb_total <- susb12 %>% 
   filter(ENTRSIZEDSCR %in% 'Total')
 
@@ -478,7 +476,7 @@ susb_nass_bea <- bind_rows(nass_bea_edited, ungroup(susb_bea)) %>%
   mutate(state_name = if_else(state_name == 'United States', 'US TOTAL', state_name),
          state_name = toupper(state_name))
 
-write_csv(susb_nass_bea, file.path(fp_out, 'susb_nass_workers_receipts_land_bea.csv'))
+write_csv(susb_nass_bea, file.path(intermediate_output_path, 'susb_nass_workers_receipts_land_bea.csv'))
 
 
 # Tabulate annual and permanent cropland ----------------------------------
@@ -501,5 +499,5 @@ nass_bea_receipts_land <- nass_naics_join_bea %>%
   group_by(state_fips, state_abbrev, state_name, BEA_code) %>%
   summarize(across(c(n_operations, labor_hired_expense, labor_contract_expense, income, receipts, n_workers, annual_cropland, permanent_cropland, pastureland), sum))
 
-write_csv(nass_bea_receipts_land, 'data/cfs_io_analysis/nass_workers_receipts_3landtypes_bea.csv')
+write_csv(nass_bea_receipts_land, file.path(intermediate_output_path, 'nass_workers_receipts_3landtypes_bea.csv'))
 

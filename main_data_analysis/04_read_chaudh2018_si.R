@@ -6,7 +6,7 @@ library(tidyverse)
 library(zoo)
 library(unpivotr)
 
-sheet_data <- xlsx_cells('data/raw_data/biodiversity/chaudhary2015SI/chaudhary_brooks_2018_si.xlsx')
+sheet_data <- xlsx_cells(file.path(data_path, 'Chaudhary_Brooks_2018/chaudhary_brooks_2018_si.xlsx'))
 
 # Which sheets to use: S2, ecoregion summary variables and lookup table, S3 and S4, global occupation and transformation CFs by region
 # S5 and S6, global occ and trans CF by country.
@@ -94,5 +94,5 @@ cf_data_final <- cf_data_behead %>%
   select(CF_type, region_type, ecoregion_code, ecoregion_name, taxon, unit, land_use, intensity, statistic, value)
 
 
-write_csv(ecoregion_data_final, 'data/raw_data/biodiversity/chaudhary2015SI/chaud2018si_ecoregions.csv')
-write_csv(cf_data_final, 'data/raw_data/biodiversity/chaudhary2015SI/chaud2018si_CFs.csv')
+write_csv(ecoregion_data_final, file.path(intermediate_output_path, 'chaud2018si_ecoregions.csv'))
+write_csv(cf_data_final, file.path(intermediate_output_path, 'chaud2018si_CFs.csv'))

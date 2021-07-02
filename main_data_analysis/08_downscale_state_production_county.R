@@ -1,17 +1,14 @@
 # Downscale state level production by BEA to county level
-# Copied and modified from county_consumption_to_faf.R
 
 # Load data ---------------------------------------------------------------
 
 library(tidyverse)
 
-fp_out <- 'data/cfs_io_analysis'
-
 # Production by state
-receipts_bea_x_state <- read_csv(file.path(fp_out, 'susb_nass_workers_receipts_land_bea.csv')) 
+receipts_bea_x_state <- read_csv(file.path(intermediate_output_path, 'susb_nass_workers_receipts_land_bea.csv')) 
 
 # Read county level weighting data for downscaling state production to county
-county_weightings <- read_csv(file.path(fp_out, 'county_weightings_for_downscale.csv'), col_types = c('cccciiii'))
+county_weightings <- read_csv(file.path(intermediate_output_path, 'county_weightings_for_downscale.csv'), col_types = c('cccciiii'))
 
 # Downscale state level production to county ------------------------------
 
@@ -29,4 +26,4 @@ production_counties <- inner_join(county_weightings, production_states, by = c('
   mutate(county_fips = paste0(state_fips, county_fips))
 
 # Write county production to CSV
-write_csv(production_counties, file.path(fp_out, 'county_production2012.csv'))
+write_csv(production_counties, file.path(intermediate_output_path, 'county_production2012.csv'))

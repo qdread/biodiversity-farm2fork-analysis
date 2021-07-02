@@ -11,14 +11,12 @@
 
 library(tidyverse)
 
-fp_diet <- 'data/raw_data/food_consumption/diet_guidelines'
-fp_crosswalk <- 'data/crossreference_tables'
-fp_out <- 'data/cfs_io_analysis'
+fp_diet <- file.path(data_path, 'dietary_guidelines')
 
 # Read Lancet dietary guidelines
 diet_lancet <- read_csv(file.path(fp_diet, 'lancet_planetary_health_diet.csv'))
 # Read USA dietary guidelines
-diet_usa <- read_csv(file.path(fp_diet, 'us_dietary_guidelines2020-2025_long.csv'))
+diet_usa <- read_csv(file.path(intermediate_output_path, 'us_dietary_guidelines2020-2025_long.csv'))
 
 # Harmonization of LAFA category names with dietary guidelines food pattern equivalent, and Lancet food categories
 # Created from lafa_category_structure.csv
@@ -27,7 +25,7 @@ diet_usa <- read_csv(file.path(fp_diet, 'us_dietary_guidelines2020-2025_long.csv
 lafa_cat_lookup <- read_csv(file.path(fp_crosswalk, 'lafa_dietary_guidelines_crosswalk.csv'))
 
 # Read cleaned LAFA data
-lafa_df <- read_csv(file.path(fp_out, 'lafa_cleaned.csv'))
+lafa_df <- read_csv(file.path(intermediate_output_path, 'lafa_cleaned.csv'))
 
 # Join lafa data with lookups ---------------------------------------------
 
@@ -190,8 +188,8 @@ diet_usa_proportion <- diet_usa_joined %>%
   rename(unit_convert_usa_diet = unit)
 
 # Write these proportions out to CSV
-write_csv(diet_lancet_proportion, 'data/cfs_io_analysis/proportion_diet_lancet.csv')
-write_csv(diet_usa_proportion, 'data/cfs_io_analysis/proportion_diet_usaguidelines.csv')
+write_csv(diet_lancet_proportion, file.path(intermediate_output_path, 'data/cfs_io_analysis/proportion_diet_lancet.csv'))
+write_csv(diet_usa_proportion, file.path(intermediate_output_path, 'data/cfs_io_analysis/proportion_diet_usaguidelines.csv'))
 
 
 # Correct the category names again so that they match between the lafa data frame and the diet to join data frames.
@@ -212,4 +210,4 @@ lafa_df_joindiets <- lafa_df_fixnames %>%
   left_join(diet_lancet_proportion, by = c('category_lancet' = 'name')) %>%
   left_join(diet_usa_proportion %>% select(-unit_convert_usa_diet), by = c('category_dietary_guidelines' = 'name'))
 
-write_csv(lafa_df_joindiets, file.path(fp_out, 'lafa_joined_with_diet_proportions.csv'))
+write_csv(lafa_df_joindiets, file.path(intermediate_output_path, 'lafa_joined_with_diet_proportions.csv'))

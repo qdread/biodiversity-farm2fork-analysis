@@ -5,7 +5,7 @@
 library(tidyverse)
 library(readxl)
 
-fp_diet <- 'data/raw_data/food_consumption/diet_guidelines'
+fp_diet <- file.path(data_path, 'dietary_guidelines')
 
 # Dietary guidelines excel sheet, already somewhat cleaned by transposing the raw table and deleting empty columns in Excel
 us_diet_file <- file.path(fp_diet, 'dietaryguidelines2020-2025cleaned.xlsx')
@@ -97,5 +97,5 @@ us_diet_final_long <- us_diet_final %>%
                           name == 'calories_other' ~ 'cal'))
 
 # Write output
-write_csv(us_diet_final, file.path(fp_diet, 'us_dietary_guidelines2020-2025_wide.csv'))
-write_csv(us_diet_final_long, file.path(fp_diet, 'us_dietary_guidelines2020-2025_long.csv'))
+write_csv(us_diet_final, file.path(intermediate_output_path, 'us_dietary_guidelines2020-2025_wide.csv'))
+write_csv(us_diet_final_long, file.path(intermediate_output_path, 'us_dietary_guidelines2020-2025_long.csv'))

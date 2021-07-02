@@ -3,8 +3,7 @@
 # Domestic (by county)
 
 source('figs/load_data_all_figs.R')
-
-# Load data from figs_v2_foreign.R
+source('figs/load_data_foreign_maps.R')
 
 # also convert county extinction flow sums 
 # Create summary data for all taxa, and animals only

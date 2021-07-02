@@ -5,8 +5,7 @@
 # Version 1 includes upc codes and random-weight purchases, 1999-2006
 # Version 2 is only upc coded purchases but has a couple extra groups (diet soda and coffee/tea), and covers 2004-2010.
 
-fp <- 'data/raw_data/USDA/QFAHPD'
-dir(fp)
+fp <- file.path(data_path, 'QFAHPD')
 
 library(tidyverse)
 library(XLConnect)
@@ -89,5 +88,5 @@ qfahpd2 <- qfahpd2 %>%
          division = divs$desc[match(division, divs$code)],
          region = regions$desc[match(region, regions$code)])
 
-write.csv(qfahpd1, file.path(fp, 'tidy_data/qfahpd1.csv'), row.names = FALSE)
-write.csv(qfahpd2, file.path(fp, 'tidy_data/qfahpd2.csv'), row.names = FALSE)
+write.csv(qfahpd1, file.path(intermediate_output_path, 'qfahpd1.csv'), row.names = FALSE)
+write.csv(qfahpd2, file.path(intermediate_output_path, 'qfahpd2.csv'), row.names = FALSE)

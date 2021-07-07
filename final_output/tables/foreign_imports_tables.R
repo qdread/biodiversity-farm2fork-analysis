@@ -5,9 +5,9 @@ library(data.table)
 library(gt)
 library(Rutilitybelt)
 
-import_crop <- fread('/nfs/qread-data/cfs_io_analysis/fao_VLT_provisional_crops_disaggregated.csv')
-import_animal <- fread('/nfs/qread-data/cfs_io_analysis/fao_VLT_provisional_animalonly.csv')
-import_biodiv <- fread('data/cfs_io_analysis/scenarios/foreign_species_lost_by_export_country_x_tnc.csv')
+import_crop <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional_crops_disaggregated.csv'))
+import_animal <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional_animalonly.csv'))
+import_biodiv <- fread(file.path(final_output_path, 'foreign_species_lost_by_export_country_x_tnc.csv'))
 
 # Filter imports by crop; baseline only
 import_crop <- import_crop[virtual_land_transfer > 0]
@@ -88,7 +88,7 @@ import_biodiv_base_wider[, animals := amphibians + birds + mammals + reptiles]
 import_biodiv_base_wider[, total := plants + animals]
 
 # Write R objects to be used if we need to use kable instead of gt
-save(import_goods_base_wide, import_biodiv_base_wider, file = 'data/cfs_io_analysis/scenario_v2_figs/gt_tables/data_import_tables.RData')
+save(import_goods_base_wide, import_biodiv_base_wider, file = file.path(final_output_path, 'data_import_tables.RData'))
 
 # Generate gt tables ------------------------------------------------------
 
@@ -117,5 +117,5 @@ gt_import_biodiv <- import_biodiv_base_wider %>%
   ) %>%
   data_color(columns = 2:8, "Reds", alpha = 0.75)
 
-saveRDS(gt_import_goods_land, 'data/cfs_io_analysis/scenario_v2_figs/gt_tables/gt_import_goods_land.RDS')
-saveRDS(gt_import_biodiv, 'data/cfs_io_analysis/scenario_v2_figs/gt_tables/gt_import_biodiv.RDS')
+saveRDS(gt_import_goods_land, file.path(final_output_path, 'gt_import_goods_land.RDS'))
+saveRDS(gt_import_biodiv, file.path(final_output_path, 'gt_import_biodiv.RDS'))

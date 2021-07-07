@@ -4,8 +4,8 @@
 
 # Generate summary table --------------------------------------------------
 
-source('figs/load_data_all_figs.R')
-source('figs/load_data_foreign_maps.R')
+source(file.path(code_path, 'final_output/figs/load_data_all_figs.R'))
+source(file.path(code_path, 'final_output/figs/load_data_foreign_maps.R'))
 
 all_extinction_base <- all_extinction_sum[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']
 all_extinction_base_total <- all_extinction_base[, .(extinctions = sum(extinctions)), by = .(land_use, origin)]
@@ -47,7 +47,7 @@ all_flows <- all_flows[order(origin, land_use)]
 all_flows[, VLT := VLT / 1000 / 100]
 
 # Save R object to be used to create table with kable
-save(all_flows, file = 'data/cfs_io_analysis/scenario_v2_figs/gt_tables/data_intensity_table.RData')
+save(all_flows, file = file.path(final_output_path, 'data_intensity_table.RData'))
 
 gt_intensity <- as_tibble(all_flows) %>%
   mutate(across(where(is.numeric), ~ signif(., 2))) %>%
@@ -78,4 +78,4 @@ gt_intensity <- as_tibble(all_flows) %>%
     autocolor_text = TRUE
   )
   
-saveRDS(gt_intensity, 'data/cfs_io_analysis/scenario_v2_figs/gt_tables/gt_intensity.RDS')
+saveRDS(gt_intensity, file.path(final_output_path, 'gt_intensity.RDS'))

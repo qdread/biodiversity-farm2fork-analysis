@@ -42,4 +42,6 @@ All the data on the Figshare repository are included as compressed `.zip` files 
 
 The file names and paths to the data within the archive are listed in this repository `docs/data_filenames.csv`.
 
+In addition, a few functions are called from an R package `Rutilitybelt` that I wrote. The source for this package is included in the root directory of this repo, called `Rutilitybelt_0.0.0.9000.tar.gz`. It can be installed from source using the command `R CMD INSTALL Rutilitybelt_0.0.0.9000.tar.gz`.
+
 *last modified by QDR, 02 July 2021*

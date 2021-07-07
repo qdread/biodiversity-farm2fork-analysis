@@ -2,8 +2,8 @@
 
 # Domestic (by county)
 
-source('figs/load_data_all_figs.R')
-source('figs/load_data_foreign_maps.R')
+source(file.path(code_path, 'final_output/figs/load_data_all_figs.R'))
+source(file.path(code_path, 'final_output/figs/load_data_foreign_maps.R'))
 
 # also convert county extinction flow sums 
 # Create summary data for all taxa, and animals only
@@ -190,8 +190,8 @@ foreign_extinction_agg_wide <- dcast(foreign_extinction_agg, country_name ~ scen
 foreign_extinction_key <- dcast(foreign_extinction_agg, country_name ~ scenario_waste + scenario_diet, value.var = 'outbound_vs_baseline')
 
 # Save R objects for creating tables with kable
-save(county_land_agg_wide, county_extinction_agg_wide, foreign_land_agg_wide, foreign_extinction_agg_wide, file = 'data/cfs_io_analysis/scenario_v2_figs/gt_tables/data_flowchange_tables.RData')
-save(county_land_key, county_extinction_key, foreign_land_key, foreign_extinction_key, file = 'data/cfs_io_analysis/scenario_v2_figs/gt_tables/data_flowchange_tables_colorkeys.RData')
+save(county_land_agg_wide, county_extinction_agg_wide, foreign_land_agg_wide, foreign_extinction_agg_wide, file = file.path(final_output_path, 'data_flowchange_tables.RData'))
+save(county_land_key, county_extinction_key, foreign_land_key, foreign_extinction_key, file = file.path(final_output_path, 'data_flowchange_tables_colorkeys.RData'))
 
 
 # Create gt tables --------------------------------------------------------
@@ -286,4 +286,4 @@ gt_foreign_extinction <- gt(foreign_extinction_agg_wide, rowname_col = 'country_
     allavoidable_planetaryhealth = 'Planetary Health'
   )
 
-save(gt_county_land, gt_county_extinction, gt_foreign_land, gt_foreign_extinction, file = 'data/cfs_io_analysis/scenario_v2_figs/gt_tables/gt_flowchanges.RData')
+save(gt_county_land, gt_county_extinction, gt_foreign_land, gt_foreign_extinction, file = file.path(final_output_path, 'gt_flowchanges.RData'))

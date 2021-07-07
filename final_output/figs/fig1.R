@@ -1,7 +1,7 @@
 # Figure 1
 # QDR 30 June 2021
 
-source('figs/load_data_all_figs.R')
+source(file.path(code_path, 'final_output/figs/load_data_all_figs.R'))
 
 # Diet differences among scenarios ----------------------------------------
 
@@ -79,6 +79,6 @@ p_consprod_bottom <- ggplot(totaldemand_relative %>% filter(scenario_waste %in% 
         strip.text.x = element_blank()) +
   guides(fill=guide_legend(nrow = 2, byrow = FALSE))
 
-png(file.path(fp_fig, 'cons_prod_fig1_combined.png'), height = 9, width = 6, res = 400, units = 'in')
+png(file.path(fp_fig, 'fig1.png'), height = 9, width = 6, res = 400, units = 'in')
   grid.arrange(p_consprod_top, p_consprod_bottom, nrow = 2, heights = c(1, 3))
 dev.off()

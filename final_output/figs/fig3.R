@@ -2,9 +2,8 @@
 # QDR / Virtualland / 19 Feb 2021
 
 # Modified 30 June 2021: Cleaned up script and deleted unused code for clean repo.
-
-source('figs/load_data_all_figs.R')
-source('figs/load_data_foreign_maps.R')
+source(file.path(code_path, 'final_output/figs/load_data_all_figs.R'))
+source(file.path(code_path, 'final_output/figs/load_data_foreign_maps.R'))
 
 # Summary figs comparing land and species lost -------------------------------------
 
@@ -167,7 +166,7 @@ p_bottom <- p_ext_grandtotals_10 +
   guides(pattern = FALSE)
 
 # Figure 3 in MS
-png(file.path(fp_fig, 'foreign_vs_domestic_10scenarios_grandtotals.png'), height = 7, width = 7, res = 400, units = 'in')
+png(file.path(fp_fig, 'fig3.png'), height = 7, width = 7, res = 400, units = 'in')
   grid.draw(gridExtra::gtable_rbind(ggplotGrob(p_top), ggplotGrob(p_bottom)))
 dev.off()
 

@@ -2,11 +2,11 @@
 # Same for foreign countries.
 # QDR / Virtualland / 05 Apr 2021
 
-source('figs/load_data_all_figs.R')
+source(file.path(code_path, 'final_output/figs/load_data_all_figs.R'))
 
 # Additionally, load foreign ecoregion map and country map
-global_eco_map <- st_read('data/raw_data/landuse/ecoregions/tnc_global_equalarea.gpkg')
-global_country_map <- st_read('data/raw_data/landuse/ecoregions/countries_global_equalarea.gpkg') %>%
+global_eco_map <- st_read(file.path(spatial_output_path, 'tnc_global_equalarea.gpkg'))
+global_country_map <- st_read(file.path(spatial_output_path, 'countries_global_equalarea.gpkg')) %>%
   select(NAME_LONG, ISO_A3)
 
 library(cowplot)
@@ -61,7 +61,7 @@ p_all <- plot_grid(plot_grid(p48, leg, nrow = 2, align = 'none', rel_heights = c
                    plot_grid(pak, phi, nrow = 2, align = 'h'), 
                    align = 'none', nrow = 1, rel_widths = c(2, 1))
 
-ggsave('data/cfs_io_analysis/scenario_v2_figs/usa_ecoregions.png', p_all, height = 7, width = 10, dpi = 300)
+ggsave(file.path(fp_fig, 'usa_ecoregions.png'), p_all, height = 7, width = 10, dpi = 300)
 
 # Global ecoregion map ----------------------------------------------------
 
@@ -76,4 +76,4 @@ pworld <- ggplot() +
   realm_fill_scale_world +
   theme(legend.position = 'bottom', legend.text = element_text(size = rel(0.6)), legend.title = element_blank())
 
-ggsave('data/cfs_io_analysis/scenario_v2_figs/world_ecoregions.png', pworld, height = 7, width = 8, dpi = 300)
+ggsave(file.path(fp_fig, 'world_ecoregions.png'), pworld, height = 7, width = 8, dpi = 300)

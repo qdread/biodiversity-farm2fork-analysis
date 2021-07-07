@@ -1,8 +1,8 @@
 # Foreign maps drawn as multipanel figures (to reduce number of figures in supplement)
 # QDR / Virtualland / 24 May 2021
 
-source('figs/load_data_all_figs.R')
-source('figs/load_data_foreign_maps.R')
+source(file.path(code_path, 'final_output/figs/load_data_all_figs.R'))
+source(file.path(code_path, 'final_output/figs/load_data_foreign_maps.R'))
 
 # Only make figures for animals, plants, and total
 # In total 16 figures will be generated. 
@@ -60,7 +60,7 @@ make_world_panel_map <- function(map_panel_data, base_map, region_type, variable
                              title_width = 10,
                              legend_height = 15)
   
-  png(glue('{fp_fig}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=100,units='cm')
+  png(glue('{fp_foreignmaps}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=100,units='cm')
   grid.draw(maps_laidout)
   dev.off()
   
@@ -79,7 +79,8 @@ poly_countries <- st_transform(poly_countries, crs = "+proj=robin")
 
 country_map_toplot <- country_map_toplot %>% filter(!country_name %in% "Antarctica")
 
-fp_fig <- 'data/cfs_io_analysis/scenario_v2_figs/paneled_foreign_maps'
+fp_foreignmaps <- file.path(fp_fig, 'paneled_foreign_maps')
+if (!dir.exists(fp_foreignmaps)) dir.create(fp_foreignmaps)
 
 
 # Extinction maps ---------------------------------------------------------

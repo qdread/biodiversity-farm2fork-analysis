@@ -31,12 +31,15 @@ intermediate_output_path <- file.path(output_path, 'intermediate_output')
 final_output_path <- file.path(output_path, 'final_output')
 spatial_output_path <- file.path(output_path, 'spatial_output')
 
+fp_fig <- file.path(final_output_path, 'figs')
+
 # Create output paths if they do not exist --------------------------------
 
 if (!dir.exists(output_path)) dir.create(output_path)
 if (!dir.exists(intermediate_output_path)) dir.create(intermediate_output_path)
 if (!dir.exists(final_output_path)) dir.create(final_output_path)
 if (!dir.exists(spatial_output_path)) dir.create(spatial_output_path)
+if (!dir.exists(fp_fig)) dir.create(fp_fig)
 if (!dir.exists(file.path(intermediate_output_path, 'faostat_processed'))) dir.create(file.path(intermediate_output_path, 'faostat_processed'))
 if (!dir.exists(file.path(intermediate_output_path, 'county_consumption_csvs'))) dir.create(file.path(intermediate_output_path, 'county_consumption_csvs'))
 if (!dir.exists(file.path(intermediate_output_path, 'county_land_consumption_csvs'))) dir.create(file.path(intermediate_output_path, 'county_land_consumption_csvs'))

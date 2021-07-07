@@ -1,7 +1,7 @@
 # Draw 10 panel scenario maps for supplements. Note: One of these figures is also presented as Figure 4 in the MS.
 # QDR / 30 June 2021
 
-source('figs/load_data_domestic_maps.R')
+source(file.path(code_path, 'final_output/figs/load_data_domestic_maps.R'))
 
 # County land maps, 10 scenarios ------------------------------------------
 

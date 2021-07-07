@@ -255,4 +255,4 @@ method_graphviz <- grViz("digraph{
 
       }")
 
-write(export_svg(method_graphviz), file = 'figs/method_graph.svg')
+write(export_svg(method_graphviz), file = file.path(fp_fig, 'method_graph.svg'))

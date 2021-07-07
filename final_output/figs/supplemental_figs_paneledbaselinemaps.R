@@ -3,9 +3,10 @@
 
 # Modified 30 June 2021: Clean up for new repo.
 
-source('figs/load_data_domestic_maps.R')
+source(file.path(code_path, 'final_output/figs/load_data_domestic_maps.R'))
 
-fp_fig <- 'data/cfs_io_analysis/scenario_v2_figs/paneled_baseline_maps'
+fp_baselinemaps <- file.path(fp_fig, 'paneled_baseline_maps')
+if (!dir.exists(fp_baselinemaps)) dir.create(fp_baselinemaps)
 
 county_land_map_base <- county_land_map_panels[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']
 county_extinction_map_base <- county_extinction_map_panels[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']

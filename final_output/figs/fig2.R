@@ -2,14 +2,11 @@
 # QDR / 30 June 2021
 
 # Pasted together from pieces of several scripts from old repo.
-
-source('figs/load_data_domestic_maps.R')
+source(file.path(code_path, 'final_output/figs/load_data_domestic_maps.R'))
 
 county_land_map_base <- county_land_map_panels[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']
 county_extinction_map_base <- county_extinction_map_panels[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']
 county_goods_map_base <- county_goods_map_panels[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']
-
-fp_fig <- 'data/cfs_io_analysis/scenario_v2_figs'
 
 leg_longbottom_theme <- theme_void() + theme(legend.position = 'bottom',
                                          legend.title = element_text(size = rel(1)),
@@ -108,6 +105,6 @@ fourmaps <- arrangeGrob(grobs = c(x_label_grobs, y_label_grobs, list(map_land_ou
                         widths = unit(c(rep(panel_width, 2), label_width), 'mm'),
                         heights = unit(c(label_width, rep(panel_height, 2)), 'mm'))
 
-png(glue('{fp_fig}/bio_land_in_out_map.png'), height=8+90+90,width=8+120+120,res=300,units='mm')
+png(glue('{fp_fig}/fig2.png'), height=8+90+90,width=8+120+120,res=300,units='mm')
 grid.draw(fourmaps)
 dev.off()

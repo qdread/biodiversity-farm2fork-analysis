@@ -310,7 +310,7 @@ make_panel_map_wrap <- function(map_panel_data, base_map, map_title, panel_title
                                   title_height = 10,
                                   legend_height = 20)
   
-  png(glue('{fp_fig}/{file_name}.png'), height=6.0*nrows+2.0,width=6.0*ncols,res=100,units='cm')
+  png(glue('{fp_baselinemaps}/{file_name}.png'), height=6.0*nrows+2.0,width=6.0*ncols,res=100,units='cm')
   grid.draw(maps_laidout)
   dev.off()
   

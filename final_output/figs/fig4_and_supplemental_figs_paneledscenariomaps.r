@@ -2,6 +2,8 @@
 # QDR / 30 June 2021
 
 source(file.path(code_path, 'final_output/figs/load_data_domestic_maps.R'))
+fp_fig <- file.path(fp_fig, 'paneled_maps')
+if (!dir.exists(fp_fig)) dir.create(fp_fig)
 
 # County land maps, 10 scenarios ------------------------------------------
 

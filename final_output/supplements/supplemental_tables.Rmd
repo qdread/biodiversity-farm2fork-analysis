@@ -8,6 +8,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+output_path <- '~/output/'
+final_output_path <- file.path(output_path, 'final_output')
 ```
 
 This document contains supplemental tables for the manuscript "Biodiversity effects of food system sustainability actions from farm to fork" by Quentin D. Read, Kelly L. Hondula, and Mary K. Muth, currently under consideration for publication in *PNAS*. **Update this with citation when it is available.**
@@ -21,10 +23,10 @@ library(data.table)
 library(kableExtra)
 library(readxl)
 
-load('/nfs/qread-data/cfs_io_analysis/scenario_v2_figs/gt_tables/data_flowchange_tables.RData')
-load('/nfs/qread-data/cfs_io_analysis/scenario_v2_figs/gt_tables/data_flowchange_tables_colorkeys.RData')
-load('/nfs/qread-data/cfs_io_analysis/scenario_v2_figs/gt_tables/data_import_tables.RData')
-load('/nfs/qread-data/cfs_io_analysis/scenario_v2_figs/gt_tables/data_intensity_table.RData')
+load(file.path(final_output_path, 'data_flowchange_tables.RData'))
+load(file.path(final_output_path, 'data_flowchange_tables_colorkeys.RData'))
+load(file.path(final_output_path, 'data_import_tables.RData'))
+load(file.path(final_output_path, 'data_intensity_table.RData'))
 
 # Calculate totals and grand totals
 # Done manually

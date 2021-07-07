@@ -64,10 +64,10 @@ spatial_output_path="~/output/spatial_output"
 
 gdalbuildvrt ${data_path}/NLCD_L48/nlcd2016landcover.vrt ${data_path}/NLCD_L48/NLCD_2016_Land_Cover_L48_20190424.img
 
-cd /nfs/qread-data/raw_data/landuse/ecoregions
+cd ${spatial_output_path}
 
 # Transform TNC ecoregions clipped to USA extent to Albers equal area.
-tncusaproj=`gdalsrsinfo ${spatial_output_path}/tnc_usa.gpkg -o proj4 | xargs`
+tncusaproj=`gdalsrsinfo tnc_usa.gpkg -o proj4 | xargs`
 nlcdproj=`gdalsrsinfo ${data_path}/NLCD_L48/nlcd2016landcover.vrt -o proj4 | xargs`
 
 ogr2ogr -f "GPKG" -t_srs "${nlcdproj}" -s_srs "${tncusaproj}" tnc_usa_aea.gpkg tnc_usa.gpkg
@@ -76,18 +76,18 @@ ogr2ogr -f "GPKG" -t_srs "${nlcdproj}" -s_srs "${tncusaproj}" tnc_usa_aea.gpkg t
 proj_moll="+proj=moll +lon_0=0 +datum=WGS84 +units=m +no_defs"
 
 # Transform global TNC ecoregions to Mollweide
-tncproj=`gdalsrsinfo tnc_terr_ecoregions.prj -o proj4 | xargs`
+tncproj=`gdalsrsinfo ${data_path}/tnc_terr_ecoregions/tnc_terr_ecoregions.prj -o proj4 | xargs`
 
-ogr2ogr -f "GPKG" -t_srs "${proj_moll}" -s_srs "${tncproj}" tnc_global_equalarea.gpkg tnc_terr_ecoregions.shp
+ogr2ogr -f "GPKG" -t_srs "${proj_moll}" -s_srs "${tncproj}" tnc_global_equalarea.gpkg ${data_path}/tnc_terr_ecoregions/tnc_terr_ecoregions.shp
 
 # Transform global country boundaries to Mollweide
 countryproj=`gdalsrsinfo ne_50m_admin_0_countries.prj -o proj4 | xargs`
 
-ogr2ogr -f "GPKG" -t_srs "${proj_moll}" -s_srs "${countryproj}" countries_global_equalarea.gpkg ne_50m_admin_0_countries.shp
+ogr2ogr -f "GPKG" -t_srs "${proj_moll}" -s_srs "${countryproj}" countries_global_equalarea.gpkg ${data_path}/ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp
 
 # Transform both the cropland and pastureland raster layers to the Mollweide projection.
 
-cd /nfs/qread-data/raw_data/landuse/global_aglands
+cd ${data_path}/global_cropland
 
 pastureproj=`gdalsrsinfo pasture.tif -o proj4 | xargs`
 cropdproj=`gdalsrsinfo GFSAD1KCD.2010.001.2016348142525.tif -o proj4 | xargs`
@@ -248,7 +248,7 @@ The following bash shell commands are run to submit the job to the Slurm compute
 ```{bash}
 EXEC="countpixels.sh"
 outdir="~/output/spatial_output"
-usaraster="${data_path}/NLCD_L48/nlcd2016landcover.vrt"
+usaraster="~/data/NLCD_L48/nlcd2016landcover.vrt"
 cd ~/virtualland/jobscripts
 
 sbatch -J nlcdcountytnc --export=vector_file=${spatial_output_path}/county_tnc_aea_intersect.gpkg,raster_file=${usaraster},output_file=${outdir}/NLCD_2016_countyTNC.csv ${EXEC}
@@ -266,18 +266,17 @@ cd ${data_path}/NLCD_HI
 gdalbuildvrt nlcd2001landcover_hi.vrt hi_landcover_wimperv_9-30-08_se5.img
 
 # Get Alaska and Hawaii CRS
-gdalsrsinfo -o wkt ${data_path}/NLCD_HI/hi_landcover_wimperv_9-30-08_se5.img > ~/hawaii_crs.wkt
-gdalsrsinfo -o wkt ${data_path}/NLCD_AK/NLCD_2016_Land_Cover_AK_20200724.img > ~/alaska_crs.wkt
+gdalsrsinfo -o wkt ${data_path}/NLCD_AK/NLCD_2016_Land_Cover_AK_20200724.img > ${data_path}/NLCD_AK/alaska_crs.wkt
+gdalsrsinfo -o wkt ${data_path}/NLCD_HI/hi_landcover_wimperv_9-30-08_se5.img > ${data_path}/NLCD_HI/hawaii_crs.wkt
 
 # Project to AK
-ogr2ogr -f "GPKG" -t_srs ~/alaska_crs.wkt ${spatial_output_path}/county_tnc_intersect_alaska_crs.gpkg ${spatial_output_path}/county_tnc_aea_intersect.gpkg
+ogr2ogr -f "GPKG" -t_srs ${data_path}/NLCD_AK/alaska_crs.wkt ${spatial_output_path}/county_tnc_intersect_alaska_crs.gpkg ${spatial_output_path}/county_tnc_aea_intersect.gpkg
 
 # Project to HI
-ogr2ogr -f "GPKG" -t_srs ~/hawaii_crs.wkt ${spatial_output_path}/county_tnc_intersect_hawaii_crs.gpkg ${spatial_output_path}/county_tnc_aea_intersect.gpkg
+ogr2ogr -f "GPKG" -t_srs ${data_path}/NLCD_HI/hawaii_crs.wkt ${spatial_output_path}/county_tnc_intersect_hawaii_crs.gpkg ${spatial_output_path}/county_tnc_aea_intersect.gpkg
 
 akraster="${data_path}/NLCD_AK/nlcd2016landcover_ak.vrt"
 hiraster="${data_path}/NLCD_HI/nlcd2001landcover_hi.vrt"
-cd ~/virtualland/jobscripts
 
 # Extract AK and HI NLCD2016 
 sbatch -J akcountytnc --export=vector_file=${spatial_output_path}/county_tnc_intersect_alaska_crs.gpkg,raster_file=${akraster},output_file=${outdir}/AK_NLCD_2016_countyTNC.csv ${EXEC}

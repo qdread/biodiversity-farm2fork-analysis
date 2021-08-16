@@ -1,6 +1,6 @@
 # Additionally, load foreign ecoregion map and country map
-global_eco_map <- st_read('data/raw_data/landuse/ecoregions/tnc_global_equalarea.gpkg')
-global_country_map <- st_read('data/raw_data/landuse/ecoregions/countries_global_equalarea.gpkg') %>%
+global_eco_map <- st_read(file.path(spatial_output_path, 'tnc_global_equalarea.gpkg'))
+global_country_map <- st_read(file.path(spatial_output_path, 'countries_global_equalarea.gpkg')) %>%
   select(NAME_LONG, ISO_A3)
 
 # Data preparation --------------------------------------

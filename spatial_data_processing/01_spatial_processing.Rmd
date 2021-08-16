@@ -188,7 +188,7 @@ library(tidyverse)
 library(exactextractr)
 
 # Read shapefile and the three grids: L48, HI, and AK
-county_tnc <- st_read(file.path(spatial_output_path, 'data/cfs_io_analysis/county_tnc_aea_intersect.gpkg'))
+county_tnc <- st_read(file.path(spatial_output_path, 'county_tnc_aea_intersect.gpkg'))
 usgrid <- raster(file.path(data_path, 'population_grids', 'uspop10.tif'))
 higrid <- raster(file.path(data_path, 'population_grids', 'hipop10.tif'))
 akgrid <- raster(file.path(data_path, 'population_grids', 'akpop10.tif'))

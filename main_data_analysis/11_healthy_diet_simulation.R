@@ -188,8 +188,8 @@ diet_usa_proportion <- diet_usa_joined %>%
   rename(unit_convert_usa_diet = unit)
 
 # Write these proportions out to CSV
-write_csv(diet_lancet_proportion, file.path(intermediate_output_path, 'data/cfs_io_analysis/proportion_diet_lancet.csv'))
-write_csv(diet_usa_proportion, file.path(intermediate_output_path, 'data/cfs_io_analysis/proportion_diet_usaguidelines.csv'))
+write_csv(diet_lancet_proportion, file.path(intermediate_output_path, 'proportion_diet_lancet.csv'))
+write_csv(diet_usa_proportion, file.path(intermediate_output_path, 'proportion_diet_usaguidelines.csv'))
 
 
 # Correct the category names again so that they match between the lafa data frame and the diet to join data frames.

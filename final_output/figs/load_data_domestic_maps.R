@@ -4,12 +4,10 @@
 # This was part of figs_v2_panelmaps.R in the old code.
 # This script must be run before creating Figure 2, the 10 panel scenario maps in the supplement, and the paneled baseline maps in the supplement.
 
-source('figs/load_data_all_figs.R')
+source(file.path(code_path, 'final_output/figs/load_data_all_figs.R'))
 library(Rutilitybelt)
 library(data.table)
 library(scico)
-
-fp_fig <- 'data/cfs_io_analysis/scenario_v2_figs/paneled_maps'
 
 # County extinction data processing ---------------------------------------
 

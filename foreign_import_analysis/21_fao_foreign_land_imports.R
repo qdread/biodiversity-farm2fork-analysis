@@ -215,9 +215,6 @@ item_codes_full <- unique(rbindlist(list(trade_tousa_byweight[, .(item, item_cod
 prod_item_code_lookup <- item_codes_full[item_code %in% prod_item_codes$item_code][order(item_code)]
 fbs_item_code_lookup <- unique(fbs[, .(item, item_code)])[order(item_code)][item_code %in% feed_proportion$item_code[feed_proportion$feed > 0]]
 
-# fwrite(prod_item_code_lookup, 'data/crossreference_tables/fao_prodcodes_to_harmonize_with_fbs.csv')
-# fwrite(fbs_item_code_lookup, 'data/crossreference_tables/fao_fbscodes_to_harmonize_with_prod.csv')
-
 # Use the mapping in the crosswalk table to join FBS with the production data.
 # Keep only relevant columns of fbs
 fbs_tojoin <- fbs[, .(area_code, area, item_code, item,  domestic_supply_quantity, feed)]

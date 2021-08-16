@@ -324,7 +324,7 @@ cdqt_naics_withimp <- cdqt_naics_withimp %>%
 nass_naics <- cdqt_naics_withimp %>%
   arrange(NAICS, state_fips)
 
-write_csv(nass_naics, file.path(intermediate_output_path, '/nfs/qread-data/cfs_io_analysis/NASS2012_receipts_workers_land_NAICS_imputed.csv'))
+write_csv(nass_naics, file.path(intermediate_output_path, 'NASS2012_receipts_workers_land_NAICS_imputed.csv'))
 
 
 # Map state NAICS NASS and SUSB to BEA ------------------------------------

@@ -45,3 +45,9 @@ if (!dir.exists(file.path(intermediate_output_path, 'county_consumption_csvs')))
 if (!dir.exists(file.path(intermediate_output_path, 'county_land_consumption_csvs'))) dir.create(file.path(intermediate_output_path, 'county_land_consumption_csvs'))
 if (!dir.exists(file.path(intermediate_output_path, 'ecoregion_landflow_csvs'))) dir.create(file.path(intermediate_output_path, 'ecoregion_landflow_csvs'))
 if (!dir.exists(file.path(intermediate_output_path, 'county_state_extinction_csvs'))) dir.create(file.path(intermediate_output_path, 'county_state_extinction_csvs'))
+
+
+# Install Rutilitybelt package from source if needed ----------------------
+
+# This package has a few utility functions that are used for manipulating data.tables.
+if (!require(Rutilitybelt)) install.packages(file.path(code_path, 'Rutilitybelt_0.0.0.9000.tar.gz'), repos = NULL, type = 'source')

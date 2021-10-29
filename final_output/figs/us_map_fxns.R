@@ -132,7 +132,7 @@ make_20panel_map <- function(map_panel_data, base_map, region_type, variable, fi
 
 # Alternative versions of map drawing functions
 
-make_20panel_map_v2 <- function(map_panel_data, base_map, region_type, variable, file_name, n_waste = 4, percent_scale = TRUE, ...) {
+make_20panel_map_v2 <- function(map_panel_data, base_map, region_type, variable, file_name, n_waste = 4, percent_scale = TRUE, output_type = 'png', ...) {
   
   args <- list(...)
   
@@ -191,9 +191,15 @@ make_20panel_map_v2 <- function(map_panel_data, base_map, region_type, variable,
                              title_width = 10,
                              legend_height = 15)
   
-  png(glue('{fp_fig}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=100,units='cm')
-  grid.draw(maps_laidout)
-  dev.off()
+  if (output_type == 'png') {
+    png(glue('{fp_fig}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=100,units='cm')
+    grid.draw(maps_laidout)
+    dev.off()
+  } else {
+    pdf(glue('{fp_fig}/{file_name}.pdf'), height=(4.5*n_waste+1+1.5)/2.54,width=(6.0*5+1)/2.54)
+    grid.draw(maps_laidout)
+    dev.off()
+  }
   
 }
 
@@ -220,7 +226,7 @@ draw_usmap_with_insets_v2 <- function(map_data, ak_idx, hi_idx, variable,
 
   # Draw the three maps
   us_map <- ggplot(map_data %>% filter(!ak_idx, !hi_idx)) +
-    geom_sf(aes_string(fill = variable), size = linewidth) +
+    geom_sf(aes_string(fill = variable), color = NA) +
     scale_main +
     add_theme +
     theme(legend.position = 'bottom') +
@@ -229,14 +235,14 @@ draw_usmap_with_insets_v2 <- function(map_data, ak_idx, hi_idx, variable,
   # Include insets for Alaska and Hawaii
   # Projections and limits from https://www.r-spatial.org/r/2018/10/25/ggplot2-sf-3.html
   hi_map <- ggplot(map_data %>% filter(hi_idx)) +
-    geom_sf(aes_string(fill = variable), size = linewidth) +
+    geom_sf(aes_string(fill = variable), color = NA) +
     coord_sf(crs = st_crs(4135), xlim = c(-161, -154), ylim = c(18, 23), expand = FALSE, datum = NA) +
     scale_inset +
     add_theme + 
     theme(legend.position = 'none')
   
   ak_map <- ggplot(map_data %>% filter(ak_idx)) +
-    geom_sf(aes_string(fill = variable), size = linewidth) +
+    geom_sf(aes_string(fill = variable), color = NA) +
     coord_sf(crs = st_crs(3467), xlim = c(-2400000, 1600000), ylim = c(200000, 2500000), expand = FALSE, datum = NA) +
     scale_inset +
     add_theme +

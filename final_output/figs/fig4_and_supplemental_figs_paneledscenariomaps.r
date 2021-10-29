@@ -259,6 +259,24 @@ make_20panel_map_v2(map_panel_data = county_extinction_map_panels[land_use %in% 
                     n_waste = 2
 )
 
+# All taxa, total land use relative to baseline, as PDF (fig 4)
+make_20panel_map_v2(map_panel_data = county_extinction_map_panels[land_use %in% 'total' & taxon %in% 'total' & scenario_waste %in% c('baseline', 'allavoidable')],
+                    base_map = county_map,
+                    region_type = 'county',
+                    variable = 'extinction_outbound_vs_baseline',
+                    file_name = 'fig4',
+                    scale_name = 'Change vs.\nbaseline',
+                    scale_factor = 1,
+                    scale_trans = 'identity',
+                    scale_type = 'divergent',
+                    ak_idx = county_ak_idx,
+                    hi_idx = county_hi_idx,
+                    add_theme = theme_void() + theme(legend.position = 'none'),
+                    n_waste = 2,
+                    output_type = 'pdf'
+)
+
+
 ###
 # For each taxon, total land use, raw extinction outbound.
 
@@ -380,7 +398,6 @@ make_20panel_map_v2(map_panel_data = county_extinction_map_panels[land_use %in% 
                     add_theme = theme_void() + theme(legend.position = 'none'),
                     n_waste = 2
 )
-
 
 # County goods flow maps --------------------------------------------------
 

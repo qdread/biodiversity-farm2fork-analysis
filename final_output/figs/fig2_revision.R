@@ -80,3 +80,9 @@ grid.draw(gtable_cbind(
   gtable_rbind(ggplotGrob(p_dland), ggplotGrob(p_fland)),
   gtable_rbind(ggplotGrob(p_dext), ggplotGrob(p_fext))))
 dev.off()
+
+pdf(file.path(fp_fig, 'pdfs/fig3.pdf'), height=(8+90+90)/25.4,width=(8+120+120)/25.4)
+grid.draw(gtable_cbind(
+  gtable_rbind(ggplotGrob(p_dland), ggplotGrob(p_fland)),
+  gtable_rbind(ggplotGrob(p_dext), ggplotGrob(p_fext))))
+dev.off()

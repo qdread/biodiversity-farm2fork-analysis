@@ -90,3 +90,7 @@ p_consprod_bottom <- ggplot(totaldemand_relative %>% filter(scenario_waste %in% 
 png(file.path(fp_fig, 'fig1.png'), height = 9, width = 6, res = 400, units = 'in')
 grid.arrange(p_consprod_top, p_consprod_bottom, nrow = 2, heights = c(1, 2.6))
 dev.off()
+
+pdf(file.path(fp_fig, 'pdfs/fig1.pdf'), height = 9, width = 6)
+grid.arrange(p_consprod_top, p_consprod_bottom, nrow = 2, heights = c(1, 2.6))
+dev.off()

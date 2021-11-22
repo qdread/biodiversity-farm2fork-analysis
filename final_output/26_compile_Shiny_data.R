@@ -368,6 +368,9 @@ county_map <- county_map_trans %>%
   rbind(alaska) %>%
   rbind(hawaii)
 
+# Simplify county map to 2% of its vertices for faster load time
+county_map <- rmapshaper::ms_simplify(county_map, keep = 0.02, keep_shapes = FALSE)
+
 # Write all to CSV --------------------------------------------------------
 
 # We now have all the data in a consistent format that could be put in a database with common keys if needed.

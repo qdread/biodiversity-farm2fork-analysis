@@ -3,6 +3,7 @@
 # QDR / Virtual land / 5 Jan 2021
 
 # Modified 21 Jan 2021: Debug, correcting error in how production factors are gotten
+# Modified 27 Jan 2022: Conservatively reduce primary-to-retail losses to zero for all foods.
 
 library(tidyverse)
 
@@ -27,6 +28,10 @@ processedveg_meanloss <- apply(processedveg, 2, mean)
 # Calculate mean rate for each stage for other processed, given the total loss rate.
 # Apply it to the other processed vegetables category.
 lafa_df_joindiets[lafa_df_joindiets$Category == 'Other processed vegetables', names(processedveg_meanloss)] <- as.list(processedveg_meanloss * lafa_df_joindiets$loss_total_percent[lafa_df_joindiets$Category == 'Other processed vegetables']/processedveg_meanloss['loss_total_percent'])
+
+# Conservatively reduce primary-to-retail losses to zero for all foods 
+# (we do not know how much of this is avoidable so it is most conservative to set it to zero)
+lafa_df_joindiets <- lafa_df_joindiets %>% mutate(loss_primary_to_retail_percent = 0)
 
 # Calculate avoidable pre-consumer waste (primary and retail combined) and avoidable consumer waste (consumer waste with unavoidable removed) rates
 # Avoidable consumer waste already calculated as loss_consumer_other_percent
@@ -92,6 +97,10 @@ processedveg_meanloss <- apply(processedveg, 2, mean)
 # Calculate mean rate for each stage for other processed, given the total loss rate.
 # Apply it to the other processed vegetables category.
 lafa_df_joindiets[lafa_df_joindiets$Category == 'Other processed vegetables', names(processedveg_meanloss)] <- as.list(processedveg_meanloss * lafa_df_joindiets$loss_total_percent[lafa_df_joindiets$Category == 'Other processed vegetables']/processedveg_meanloss['loss_total_percent'])
+
+# Conservatively reduce primary-to-retail losses to zero for all foods 
+# (we do not know how much of this is avoidable so it is most conservative to set it to zero)
+lafa_df_joindiets <- lafa_df_joindiets %>% mutate(loss_primary_to_retail_percent = 0)
 
 # Calculate avoidable pre-consumer waste (primary and retail combined) and avoidable consumer waste (consumer waste with unavoidable removed) rates
 # Avoidable consumer waste already calculated as loss_consumer_other_percent

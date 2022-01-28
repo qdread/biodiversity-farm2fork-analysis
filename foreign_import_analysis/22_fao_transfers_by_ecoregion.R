@@ -20,7 +20,7 @@ count_pasture <- fread(file.path(spatial_output_path, 'global_count_pasture.csv'
 count_cropd <- count_cropd[, crop_sum := rowSums(count_cropd[,c(as.character(1:7))], na.rm = TRUE)]
 
 # Read the land transfers by FAO
-fao_vlt <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional.csv'))
+fao_vlt <- fread(file.path(intermediate_output_path, 'fao_VLT.csv'))
 
 # Remove zero VLT countries
 fao_vlt[, VLT_sum := rowSums(.SD, na.rm = TRUE), .SDcols = patterns('VLT_')]

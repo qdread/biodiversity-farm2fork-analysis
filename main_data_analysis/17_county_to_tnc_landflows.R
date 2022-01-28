@@ -32,11 +32,11 @@ county_tnc_weights <- county_tnc_weights[, c('county_fips', 'TNC', proportion_co
 
 # Applied in parallel to each scenario
 
-county_flows_to_tnc_flows <- function(diet, waste) {
+county_flows_to_tnc_flows <- function(diet, waste, file_path) {
   
   # Calculate flows from ecoregion to county 
   
-  flows <- fread(glue::glue('{intermediate_output_path}/county_land_consumption_csvs/D_{diet}_WR_{waste}_landconsumption.csv'), colClasses = rep(c('character', 'double'), c(5, 1)))
+  flows <- fread(glue::glue('{file_path}/county_land_consumption_csvs/D_{diet}_WR_{waste}_landconsumption.csv'), colClasses = rep(c('character', 'double'), c(5, 1)))
   
   flows[, land_type := gsub('_exchange', '', land_type)][, state_from := NULL]
         
@@ -57,7 +57,7 @@ county_flows_to_tnc_flows <- function(diet, waste) {
   
   # Write this one to CSV (county flows weighted by TNC). It will be pretty big
   fwrite(flows[, .(scenario, county_from, county_to, TNC_from, annual_cropland, permanent_cropland, pastureland)],
-         glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_county_x_county_landtncweights.csv'))
+         glue::glue('{file_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_county_x_county_landtncweights.csv'))
 
   # Then, sum grouped by target county and originating ecoregion
   
@@ -67,7 +67,7 @@ county_flows_to_tnc_flows <- function(diet, waste) {
     , setnames(.SD, land_cols, flow_cols)]
 
   # Save totals to CSV
-  fwrite(flows_tnc_to_county, glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_county.csv'))
+  fwrite(flows_tnc_to_county, glue::glue('{file_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_county.csv'))
   
   # Use population weights to get TNC x TNC transfers 
   
@@ -84,7 +84,7 @@ county_flows_to_tnc_flows <- function(diet, waste) {
   flows_tnc_agg <- flows_tnc_pop[, lapply(.SD, sum, na.rm = TRUE), by = .(scenario, TNC_from, TNC_to), .SDcols = flow_cols]
 
   # Save outputs to CSVs
-  fwrite(flows_tnc_agg, glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_tnc.csv'))
+  fwrite(flows_tnc_agg, glue::glue('{file_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_tnc.csv'))
 }
 
 
@@ -93,15 +93,19 @@ county_flows_to_tnc_flows <- function(diet, waste) {
 scenario_combos <- expand.grid(diet = c('baseline','planetaryhealth','usstyle','medstyle','vegetarian'),
                                waste = c('baseline','preconsumer','consumer','allavoidable'), stringsAsFactors = FALSE)
 
-library(rslurm)
+library(furrr)
+plan(multicore(workers = 20))
 
-sjob_convertflows <- slurm_apply(county_flows_to_tnc_flows, scenario_combos, 
-                                 jobname = 'convert_flows', nodes = 5, cpus_per_node = 1, 
-                                 global_objects = c('county_tnc_weights'),
-                                 slurm_options = list(partition = 'sesync'))
+future_pwalk(scenario_combos, county_flows_to_tnc_flows, file_path = intermediate_output_path)
 
-cleanup_files(sjob_convertflows)
-
+# library(rslurm)
+# 
+# sjob_convertflows <- slurm_apply(county_flows_to_tnc_flows, scenario_combos, 
+#                                  jobname = 'convert_flows', nodes = 5, cpus_per_node = 1, 
+#                                  global_objects = c('county_tnc_weights'),
+#                                  slurm_options = list(partition = 'sesync'))
+# 
+# cleanup_files(sjob_convertflows)
 
 # Combine ecoregion flows into single file --------------------------------
 

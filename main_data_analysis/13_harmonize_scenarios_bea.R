@@ -3,6 +3,7 @@
 
 # Modified 20 Apr 2021: Exclude wild-caught fish from the scenarios, to assume that all demand is met by increased aquaculture.
 # Modified 22 Mar 2021: Simultaneously harmonize a separate data frame of foreign production factors.
+# Modified 27 Jan 2022: Remove distinction between domestic and foreign production factors.
 
 library(tidyverse)
 

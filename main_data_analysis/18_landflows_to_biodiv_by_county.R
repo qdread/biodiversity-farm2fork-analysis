@@ -89,9 +89,8 @@ future_pwalk(scenario_combos, extinctions_by_scenario, file_path = intermediate_
 # library(rslurm)
 # 
 # sjob_extinctions <- slurm_apply(extinctions_by_scenario, scenario_combos, file_path = intermediate_output_path,
-#                                  jobname = 'extinctions_county', nodes = 5, cpus_per_node = 1, 
-#                                  global_objects = c('chaudsi_processed'),
-#                                  slurm_options = list(partition = 'sesync'))
+#                                  jobname = 'extinctions_county', nodes = 2, cpus_per_node = 10, 
+#                                  global_objects = c('chaudsi_processed'))
 # 
 # cleanup_files(sjob_extinctions)
 

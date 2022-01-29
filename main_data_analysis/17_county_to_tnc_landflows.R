@@ -100,10 +100,9 @@ future_pwalk(scenario_combos, county_flows_to_tnc_flows, file_path = intermediat
 
 # library(rslurm)
 # 
-# sjob_convertflows <- slurm_apply(county_flows_to_tnc_flows, scenario_combos, 
-#                                  jobname = 'convert_flows', nodes = 5, cpus_per_node = 1, 
-#                                  global_objects = c('county_tnc_weights'),
-#                                  slurm_options = list(partition = 'sesync'))
+# sjob_convertflows <- slurm_apply(county_flows_to_tnc_flows, scenario_combos, file_path = intermediate_output_path,
+#                                  jobname = 'convert_flows', nodes = 2, cpus_per_node = 10, 
+#                                  global_objects = c('county_tnc_weights'))
 # 
 # cleanup_files(sjob_convertflows)
 

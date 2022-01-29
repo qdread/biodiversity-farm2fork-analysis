@@ -67,12 +67,3 @@ library(furrr)
 plan(multicore(workers = 20))
 
 future_pwalk(scenario_combos, land_consumption_by_scenario, file_path = intermediate_output_path)
-
-# library(rslurm)
-# 
-# sjob <- slurm_apply(land_consumption_by_scenario, scenario_combos, file_path = intermediate_output_path,
-#                     jobname = 'county_land', nodes = 5, cpus_per_node = 1, # Only 1 per node because of the large memory requirements.
-#                     global_objects = c('land_exch_tables'),
-#                     slurm_options = list(partition = 'sesync'))
-# 
-# cleanup_files(sjob)

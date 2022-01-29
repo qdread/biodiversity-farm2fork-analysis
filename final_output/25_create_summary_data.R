@@ -67,16 +67,15 @@ write_csv(totaldemand_sums, file.path(final_output_path, 'totaldemand_sums_all_s
 
 # Goods flows by county ---------------------------------------------------
 
-options(mc.cores = 8)
-plan(multicore)
+plan(multicore(workers = 8))
 
 fp_goods <- file.path(intermediate_output_path, 'county_consumption_csvs')
 
 scenario_combos <- expand_grid(diet = c('baseline','planetaryhealth','medstyle','usstyle','vegetarian'),
                                waste = c('baseline','preconsumer','consumer','allavoidable'))
 
-sum_goods_flows_county <- function(diet, waste) {
-  flows <- read_csv(glue::glue('{fp_goods}/D_{diet}_WR_{waste}_wide.csv'))
+sum_goods_flows_county <- function(diet, waste, file_path) {
+  flows <- read_csv(glue::glue('{file_path}/D_{diet}_WR_{waste}_wide.csv'))
   message(glue::glue('{diet} by {waste} read'))
   # Outbound: each row represents origin county, sum across all destination counties (columns)
   flows_outbound <- cbind(flows[, 1:3], flow_outbound = apply(flows[, -(1:3)], 1, sum)) %>%
@@ -97,7 +96,7 @@ sum_goods_flows_county <- function(diet, waste) {
 
 }
 
-county_goods_flows <- future_pmap_dfr(scenario_combos, sum_goods_flows_county)
+county_goods_flows <- future_pmap_dfr(scenario_combos, sum_goods_flows_county, file_path = fp_goods)
 
 write_csv(county_goods_flows, file.path(final_output_path, 'goodsflows_county_sums_all_scenarios.csv'))
 
@@ -108,8 +107,8 @@ fp_landcounties <- file.path(intermediate_output_path, 'county_land_consumption_
 scenario_combos <- expand_grid(diet = c('baseline','planetaryhealth','medstyle','usstyle','vegetarian'),
                                waste = c('baseline','preconsumer','consumer','allavoidable'))
 
-sum_land_flows_county <- function(diet, waste) {
-  flows <- read_csv(glue::glue('{fp_landcounties}/D_{diet}_WR_{waste}_landconsumption.csv'))
+sum_land_flows_county <- function(diet, waste, file_path) {
+  flows <- read_csv(glue::glue('{file_path}/D_{diet}_WR_{waste}_landconsumption.csv'))
   message(glue::glue('{diet} by {waste} read'))
   # Longform data so outbound and inbound sums are grouped separately
   flows_outbound <- flows %>%
@@ -132,6 +131,6 @@ sum_land_flows_county <- function(diet, waste) {
   
 }
 
-county_land_flows <- future_pmap_dfr(scenario_combos, sum_land_flows_county)
+county_land_flows <- future_pmap_dfr(scenario_combos, sum_land_flows_county, file_path = fp_landcounties)
 
 write_csv(county_land_flows, file.path(final_output_path, 'landflows_county_sums_all_scenarios.csv'))

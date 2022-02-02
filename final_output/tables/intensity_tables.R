@@ -15,6 +15,7 @@ all_extinction_base_animals[, taxon := 'animals']
 
 all_extinction_base[, scenario_diet := NULL]
 all_extinction_base[, scenario_waste := NULL]
+all_extinction_base[, kingdom := NULL]
 
 all_extinction_base <- rbindlist(list(all_extinction_base, all_extinction_base_total, all_extinction_base_animals), use.names = TRUE)
 all_extinction_base[, taxon := paste0('VBT_', taxon)]

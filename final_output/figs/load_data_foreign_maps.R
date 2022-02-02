@@ -18,13 +18,6 @@ foreign_vlt_countries <- foreign_vlt_export[, lapply(.SD, sum, na.rm = TRUE),
                                             by = .(scenario_diet, scenario_waste, country_name, ISO_A3, region_UN, subregion_UN), 
                                             .SDcols = patterns('^V')]
 
-foreign_vlt_countries[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline'][order(-VLT_pasture)]
-foreign_vlt_countries[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline'][order(-VLT_annual)]
-foreign_vlt_countries[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline'][order(-VLT_permanent)]
-
-# Top exporters of virtual land to the United States, baseline case.
-foreign_vlt_countries[scenario_diet %in% 'baseline' & scenario_waste %in% 'baseline']
-
 ### Compare domestic and foreign VLT into the USA.
 
 # Sum the foreign vlt across all countries.

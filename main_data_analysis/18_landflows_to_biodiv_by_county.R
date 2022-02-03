@@ -86,15 +86,6 @@ plan(multicore(workers = 20))
 
 future_pwalk(scenario_combos, extinctions_by_scenario, file_path = intermediate_output_path)
 
-# library(rslurm)
-# 
-# sjob_extinctions <- slurm_apply(extinctions_by_scenario, scenario_combos, file_path = intermediate_output_path,
-#                                  jobname = 'extinctions_county', nodes = 2, cpus_per_node = 10, 
-#                                  global_objects = c('chaudsi_processed'))
-# 
-# cleanup_files(sjob_extinctions)
-
-
 # Load and concatenate and write ------------------------------------------
 
 extinctions_state_all <- purrr::pmap_dfr(scenario_combos, function(diet, waste) fread(glue::glue('{intermediate_output_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_state_x_state_extinctions.csv'), colClasses = rep(c('character', 'double'), c(5, 1))))

@@ -98,14 +98,6 @@ plan(multicore(workers = 20))
 
 future_pwalk(scenario_combos, county_flows_to_tnc_flows, file_path = intermediate_output_path)
 
-# library(rslurm)
-# 
-# sjob_convertflows <- slurm_apply(county_flows_to_tnc_flows, scenario_combos, file_path = intermediate_output_path,
-#                                  jobname = 'convert_flows', nodes = 2, cpus_per_node = 10, 
-#                                  global_objects = c('county_tnc_weights'))
-# 
-# cleanup_files(sjob_convertflows)
-
 # Combine ecoregion flows into single file --------------------------------
 
 flows_tnc_all <- purrr::pmap_dfr(scenario_combos, function(diet, waste) fread(glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_landflows_tnc_to_tnc.csv')))

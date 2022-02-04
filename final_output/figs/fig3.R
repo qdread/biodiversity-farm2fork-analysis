@@ -173,3 +173,6 @@ png(file.path(fp_fig, 'fig3.png'), height = 7, width = 7, res = 400, units = 'in
   grid.draw(gridExtra::gtable_rbind(ggplotGrob(p_top), ggplotGrob(p_bottom)))
 dev.off()
 
+pdf(file.path(fp_fig, 'pdfs/fig3.pdf'), height = 7, width = 7)
+  grid.draw(gridExtra::gtable_rbind(ggplotGrob(p_top), ggplotGrob(p_bottom)))
+dev.off()

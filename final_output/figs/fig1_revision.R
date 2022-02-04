@@ -94,3 +94,23 @@ dev.off()
 pdf(file.path(fp_fig, 'pdfs/fig1.pdf'), height = 9, width = 6)
 grid.arrange(p_consprod_top, p_consprod_bottom, nrow = 2, heights = c(1, 2.6))
 dev.off()
+
+
+# Supplemental figure: absolute values ------------------------------------
+
+# Absolute values
+p_totaldemand_sums <- ggplot(totaldemand_sums %>% filter(scenario_waste %in% c('baseline', 'allavoidable')), aes(x = short_name, y = demand/1e9)) +
+  geom_col(aes(fill = kingdom), color = 'black', size = 0.25) +
+  facet_grid(scenario_waste ~ scenario_diet, labeller = scenario_labeller) +
+  scale_x_discrete(name = 'food category') +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.03)), name = 'production (billion USD)') +
+  scale_fill_manual(values = setNames(okabe_colors[c(8, 4)], c('animal', 'plant'))) +
+  theme(panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = 'none')
+
+p_totaldemand_sums <- ggdraw(p_totaldemand_sums + theme(plot.margin = unit(c(25, 25, 5.5, 5.5), 'points'))) +
+  draw_label(label = 'diet scenario', x = 0.5, y = 0.97) +
+  draw_label(label = 'waste scenario', x = 0.99, y = 0.5, angle = -90)
+
+ggsave(file.path(fp_fig, 'total_consumption_10_scenarios.png'), p_totaldemand_sums, height = 9*.75, width = 12, dpi = 400)

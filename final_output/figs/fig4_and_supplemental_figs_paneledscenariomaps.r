@@ -276,6 +276,21 @@ make_20panel_map_v2(map_panel_data = county_extinction_map_panels[land_use %in% 
                     output_type = 'pdf'
 )
 
+# Fig 4 as png
+make_20panel_map_v2(map_panel_data = county_extinction_map_panels[land_use %in% 'total' & taxon %in% 'total' & scenario_waste %in% c('baseline', 'allavoidable')],
+                    base_map = county_map,
+                    region_type = 'county',
+                    variable = 'extinction_outbound_vs_baseline',
+                    file_name = 'fig4',
+                    scale_name = 'Change vs.\nbaseline',
+                    scale_factor = 1,
+                    scale_trans = 'identity',
+                    scale_type = 'divergent',
+                    ak_idx = county_ak_idx,
+                    hi_idx = county_hi_idx,
+                    add_theme = theme_void() + theme(legend.position = 'none'),
+                    n_waste = 2
+)
 
 ###
 # For each taxon, total land use, raw extinction outbound.

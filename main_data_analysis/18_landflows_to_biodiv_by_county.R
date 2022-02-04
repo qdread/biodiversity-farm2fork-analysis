@@ -16,7 +16,6 @@
 # Process Chaudhary data --------------------------------------------------
 
 library(data.table)
-library(rslurm)
 
 # Updated characterization factors from Chaudhary and Brooks 2018
 chaudsi2018 <- fread(file.path(intermediate_output_path, 'chaud2018si_CFs.csv'), colClasses = rep(c('character', 'double'), c(9, 1)))
@@ -34,9 +33,9 @@ chaudsi_processed <- chaudsi_processed[intensity %in% 'med' & CF_type %in% 'occu
 
 # Function to read VLT, join with Chaud, and calc extinctions -------------
 
-extinctions_by_scenario <- function(diet, waste) {
+extinctions_by_scenario <- function(diet, waste, file_path = intermediate_output_path) {
   # Read VLT values for scenario
-  VLT <- fread(glue::glue('{intermediate_output_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_county_x_county_landtncweights.csv'), 
+  VLT <- fread(glue::glue('{file_path}/ecoregion_landflow_csvs/D_{diet}_WR_{waste}_county_x_county_landtncweights.csv'), 
                colClasses = rep(c('character', 'double'), c(4, 3)))
   
   # Join land transfers and characterization factors
@@ -71,8 +70,8 @@ extinctions_by_scenario <- function(diet, waste) {
   county_flows <- county_outbound[county_inbound, on = .(scenario, county, land_use, taxon)]
   county_flows[is.na(extinction_outbound), extinction_outbound := 0]
 
-  fwrite(extinctions_state, glue::glue('{intermediate_output_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_state_x_state_extinctions.csv'))
-  fwrite(county_flows, glue::glue('{intermediate_output_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_county_extinction_sums.csv'))
+  fwrite(extinctions_state, glue::glue('{file_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_state_x_state_extinctions.csv'))
+  fwrite(county_flows, glue::glue('{file_path}/county_state_extinction_csvs/D_{diet}_WR_{waste}_county_extinction_sums.csv'))
   
 }
 
@@ -82,13 +81,10 @@ extinctions_by_scenario <- function(diet, waste) {
 scenario_combos <- expand.grid(diet = c('baseline','planetaryhealth','usstyle','medstyle','vegetarian'),
                                waste = c('baseline','preconsumer','consumer','allavoidable'), stringsAsFactors = FALSE)
 
-sjob_extinctions <- slurm_apply(extinctions_by_scenario, scenario_combos, 
-                                 jobname = 'extinctions_county', nodes = 5, cpus_per_node = 1, 
-                                 global_objects = c('chaudsi_processed'),
-                                 slurm_options = list(partition = 'sesync'))
+library(furrr)
+plan(multicore(workers = 20))
 
-cleanup_files(sjob_extinctions)
-
+future_pwalk(scenario_combos, extinctions_by_scenario, file_path = intermediate_output_path)
 
 # Load and concatenate and write ------------------------------------------
 

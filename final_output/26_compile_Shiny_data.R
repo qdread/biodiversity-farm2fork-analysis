@@ -147,8 +147,8 @@ replace_na_dt(county_land_flow_sums)
 
 # Load foreign goods data -------------------------------------------------
 
-import_crop <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional_crops_disaggregated.csv'))
-import_animal <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional_animalonly.csv'))
+import_crop <- fread(file.path(intermediate_output_path, 'fao_VLT_crops_disaggregated.csv'))
+import_animal <- fread(file.path(intermediate_output_path, 'fao_VLT_animalonly.csv'))
 
 import_crop <- tidyr::separate(import_crop[scenario != '', ], scenario, into = c('D', 'scenario_diet', 'W', 'scenario_waste'), sep = '_')
 import_crop[, c('D','W') := NULL]

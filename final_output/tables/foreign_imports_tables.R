@@ -5,8 +5,8 @@ library(data.table)
 library(gt)
 library(Rutilitybelt)
 
-import_crop <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional_crops_disaggregated.csv'))
-import_animal <- fread(file.path(intermediate_output_path, 'fao_VLT_provisional_animalonly.csv'))
+import_crop <- fread(file.path(intermediate_output_path, 'fao_VLT_crops_disaggregated.csv'))
+import_animal <- fread(file.path(intermediate_output_path, 'fao_VLT_animalonly.csv'))
 import_biodiv <- fread(file.path(final_output_path, 'foreign_species_lost_by_export_country_x_tnc.csv'))
 
 # Filter imports by crop; baseline only

@@ -20,7 +20,7 @@ read_all_csvs(file.path(intermediate_output_path, 'faostat_processed'))
 fao_codes_table <- fread(file.path(fp_crosswalk, 'faostat_all_codes_harmonized.csv'))
 
 # Read relative consumption factors vs. baseline by BEA code for each scenario
-scenario_factors_bea <- fread(file.path(intermediate_output_path, 'bea_consumption_factors_diet_waste_scenarios_foreign.csv'))
+scenario_factors_bea <- fread(file.path(intermediate_output_path, 'bea_consumption_factors_diet_waste_scenarios.csv'))
 
 # Melt scenario_factors_bea to long form.
 scenario_factors_long <- melt(scenario_factors_bea, id.vars = c('BEA_389_code', 'BEA_389_def'), variable.name = 'scenario', value.name = 'consumption_factor')
@@ -444,9 +444,9 @@ VLT_sums_crop[, crop_type := paste0('VLT_', crop_type)]
 VLT_sums_crop <- dcast(VLT_sums_crop, scenario + country_code + country_name ~ crop_type, fill = 0)
 
 # Write VLT sums for crop and animal separately
-fwrite(production_crops_trade_by_scenario, file.path(intermediate_output_path, 'fao_VLT_provisional_crops_disaggregated.csv'))
-fwrite(VLT_sums_crop, file.path(intermediate_output_path, 'fao_VLT_provisional_croponly.csv'))
-fwrite(VLT_sums_animal, file.path(intermediate_output_path, 'fao_VLT_provisional_animalonly.csv'))
+fwrite(production_crops_trade_by_scenario, file.path(intermediate_output_path, 'fao_VLT_crops_disaggregated.csv'))
+fwrite(VLT_sums_crop, file.path(intermediate_output_path, 'fao_VLT_croponly.csv'))
+fwrite(VLT_sums_animal, file.path(intermediate_output_path, 'fao_VLT_animalonly.csv'))
 
 VLT_sums_animal_overall <- VLT_sums_animal[, lapply(.SD, sum, na.rm = TRUE), by = .(scenario, country_code, country_name), .SDcols = patterns('VLT')]
 
@@ -458,5 +458,5 @@ VLT_all <- VLT_all[, .(scenario, country_code, country_name, VLT_annual, VLT_mix
 
 replace_na_dt(VLT_all, cols = grep('VLT', names(VLT_all), value = TRUE), replace_with = 0)
 
-fwrite(VLT_all, file.path(intermediate_output_path, 'fao_VLT_provisional.csv'))
+fwrite(VLT_all, file.path(intermediate_output_path, 'fao_VLT.csv'))
 

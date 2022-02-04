@@ -42,10 +42,6 @@ county_extinction_flow_sums <- read_csv(file.path(final_output_path, 'species_lo
 # Flows of species extinctions between states (raw pairwise)
 state_extinction_flows <- read_csv(file.path(final_output_path, 'species_lost_state_x_state_all_scenarios_med.csv'), col_types = 'cccccd')
 
-# Foreign virtual land transfers into USA, by country x tnc combination exporting them and by county importing them
-foreign_vlt_export <- read_csv(file.path(final_output_path, 'foreign_VLT_by_country_x_TNC.csv'))
-foreign_vlt_import <- read_csv(file.path(final_output_path, 'foreign_VLT_to_counties.csv'))
-
 # Foreign flows of species extinctions into USA, by country x tnc combination exporting them and by county importing them
 foreign_extinction_export <- read_csv(file.path(final_output_path, 'foreign_species_lost_by_export_country_x_tnc.csv'))
 foreign_extinction_import <- read_csv(file.path(final_output_path, 'foreign_species_lost_by_import_county.csv'))
@@ -53,6 +49,10 @@ foreign_extinction_import <- read_csv(file.path(final_output_path, 'foreign_spec
 # Foreign goods transfers into USA, one for animals and one for crops
 foreign_animal_export <- read_csv(file.path(intermediate_output_path, 'fao_production_trade_animals.csv'))
 foreign_crop_export <- read_csv(file.path(intermediate_output_path, 'fao_production_trade_crops.csv'))
+
+# Foreign virtual land transfers into USA, by country x tnc combination exporting them and by county importing them
+foreign_vlt_export <- read_csv(file.path(final_output_path, 'foreign_VLT_by_country_x_TNC.csv'))
+foreign_vlt_import <- read_csv(file.path(final_output_path, 'foreign_VLT_to_counties.csv'))
 
 # Map of counties in AEA
 county_map <- st_read(file.path(spatial_output_path, 'USA_county_2014_aea.gpkg'))

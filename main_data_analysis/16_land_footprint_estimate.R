@@ -23,9 +23,9 @@ load(file.path(intermediate_output_path, 'state_land_exchange_tables.RData'))
 
 # We need to get the total land consumption for all counties in all scenarios, attributable to each good.
 # Define function to do this for a single scenario.
-land_consumption_by_scenario <- function(diet, waste) {
+land_consumption_by_scenario <- function(diet, waste, file_path) {
   
-  consumption <- fread(glue::glue('{intermediate_output_path}/county_consumption_csvs/D_{diet}_WR_{waste}_wide.csv'),
+  consumption <- fread(glue::glue('{file_path}/county_consumption_csvs/D_{diet}_WR_{waste}_wide.csv'),
                        colClasses = rep(c('character','double'), c(3, 3112)))
   
   # Pivot consumption matrix to long form
@@ -57,17 +57,13 @@ land_consumption_by_scenario <- function(diet, waste) {
   land_consumption <- consumption_vectors[, .(scenario, county_to, state_from, county_from, land_consumption)]
   land_consumption <- unnest_dt(land_consumption, col = land_consumption, id = .(scenario, county_to, state_from, county_from))
 
-  fwrite(land_consumption, glue::glue('{intermediate_output_path}/county_land_consumption_csvs/D_{diet}_WR_{waste}_landconsumption.csv'))
+  fwrite(land_consumption, glue::glue('{file_path}/county_land_consumption_csvs/D_{diet}_WR_{waste}_landconsumption.csv'))
 }
 
 scenario_combos <- expand_grid(diet = c('baseline','planetaryhealth','usstyle','medstyle','vegetarian'),
                                waste = c('baseline','preconsumer','consumer','allavoidable'))
 
-library(rslurm)
+library(furrr)
+plan(multicore(workers = 20))
 
-sjob <- slurm_apply(land_consumption_by_scenario, scenario_combos, 
-                    jobname = 'county_land', nodes = 5, cpus_per_node = 1, # Only 1 per node because of the large memory requirements.
-                    global_objects = c('land_exch_tables'),
-                    slurm_options = list(partition = 'sesync'))
-
-cleanup_files(sjob)
+future_pwalk(scenario_combos, land_consumption_by_scenario, file_path = intermediate_output_path)

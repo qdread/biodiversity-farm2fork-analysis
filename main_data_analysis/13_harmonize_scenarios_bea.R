@@ -3,6 +3,7 @@
 
 # Modified 20 Apr 2021: Exclude wild-caught fish from the scenarios, to assume that all demand is met by increased aquaculture.
 # Modified 22 Mar 2021: Simultaneously harmonize a separate data frame of foreign production factors.
+# Modified 27 Jan 2022: Remove distinction between domestic and foreign production factors.
 
 library(tidyverse)
 
@@ -10,8 +11,6 @@ fp_diet <- file.path(data_path, 'dietary_guidelines')
 
 # LAFA data with the different scenario production factors calculated
 lafa_df <- read_csv(file.path(intermediate_output_path, 'lafa_with_production_factors_diet_x_waste.csv'))
-lafa_df_foreign <- read_csv(file.path(intermediate_output_path, 'lafa_with_production_factors_diet_x_waste_foreign.csv'))
-
 
 # Process lafa scenario input data ----------------------------------------
 
@@ -20,9 +19,6 @@ lafa_df_foreign <- read_csv(file.path(intermediate_output_path, 'lafa_with_produ
 # Primary weight lb/y is the produced weight in baseline case.
 # Multiply the primary weight by the appropriate production factor. (first select only the weights and production factors)
 scenario_production_weights <- lafa_df %>% 
-  select(Category, primary_weight_lb_y, planetary_health, us_style, med_style, vegetarian, preconsumer_waste_reduction_prod_factor, consumer_waste_reduction_prod_factor, allavoidable_waste_reduction_prod_factor, starts_with('planetary_health_x'), starts_with('us_style_x'), starts_with('med_style_x'), starts_with('vegetarian_x')) %>%
-  mutate_at(vars(planetary_health:vegetarian_x_allavoidable), ~ . * primary_weight_lb_y)
-scenario_production_weights_foreign <- lafa_df_foreign %>% 
   select(Category, primary_weight_lb_y, planetary_health, us_style, med_style, vegetarian, preconsumer_waste_reduction_prod_factor, consumer_waste_reduction_prod_factor, allavoidable_waste_reduction_prod_factor, starts_with('planetary_health_x'), starts_with('us_style_x'), starts_with('med_style_x'), starts_with('vegetarian_x')) %>%
   mutate_at(vars(planetary_health:vegetarian_x_allavoidable), ~ . * primary_weight_lb_y)
 
@@ -34,8 +30,6 @@ waste_scenarios <- c('baseline', 'preconsumer', 'consumer', 'allavoidable')
 new_names <- c(paste('D', diet_scenarios, 'WR_baseline', sep = '_'), paste('D_baseline', 'WR', waste_scenarios[-1], sep = '_'), outer(waste_scenarios[-1], diet_scenarios[-1], function(w, d) paste('D', d, 'WR', w, sep = '_')))
 
 names(scenario_production_weights)[-1] <- new_names
-names(scenario_production_weights_foreign)[-1] <- new_names
-
 
 # Harmonize LAFA categories with BEA --------------------------------------
 
@@ -138,11 +132,6 @@ scenario_weights_long <- scenario_production_weights %>%
   pivot_longer(-c(Category, LAFA_number), names_to = 'scenario', values_to = 'weight') %>%
   left_join(lafa_priceperpound_all, by = c('Category' = 'Food')) %>%
   mutate(value = weight * price)
-scenario_weights_long_foreign <- scenario_production_weights_foreign %>%
-  mutate(LAFA_number = 1:nrow(.)) %>%
-  pivot_longer(-c(Category, LAFA_number), names_to = 'scenario', values_to = 'weight') %>%
-  left_join(lafa_priceperpound_all, by = c('Category' = 'Food')) %>%
-  mutate(value = weight * price)
 
 # Determine the LAFA categories to average, to create each BEA category.
 
@@ -165,12 +154,7 @@ scenario_values_bea_notbeverage <- bea2lafa_notbeverage %>%
   left_join(scenario_weights_long, by = c('LAFA_codes' = 'LAFA_number')) %>%
   group_by(BEA_389_code, BEA_389_def, scenario) %>%
   summarize(value = sum(value))
-scenario_values_bea_notbeverage_foreign <- bea2lafa_notbeverage %>%
-  unnest(cols = LAFA_codes) %>%
-  left_join(scenario_weights_long_foreign, by = c('LAFA_codes' = 'LAFA_number')) %>%
-  group_by(BEA_389_code, BEA_389_def, scenario) %>%
-  summarize(value = sum(value))
-  
+
 # Add production factors for the categories present in BEA but not LAFA (beverages)
 # For waste scenarios, use the waste rates we compiled for the Stoten paper.
 # For diet scenarios, use the production factors for sugar for soft drinks and flavored drinks. For coffee, tea, and alcohol, assume unchanged with diet.
@@ -186,19 +170,10 @@ beverage_preconsumer_waste <-  1 - prod(1 - beverage_preconsumer_waste_rates) # 
 beverage_consumer_waste <- c(loss_consumption = 0.080) # 8%
 beverage_allavoidable_waste <- 1 - prod(1 - c(beverage_preconsumer_waste, beverage_consumer_waste)) # 16.5%
 
-beverage_preconsumer_waste_foreign <- beverage_preconsumer_waste_rates['loss_distribution'] #5%
-beverage_consumer_waste_foreign <- beverage_consumer_waste
-beverage_allavoidable_waste_foreign <- 1 - prod(1 - c(beverage_preconsumer_waste_foreign, beverage_consumer_waste_foreign)) #12.6%
-
 beverage_waste_factors <- c(baseline = 1, 
                             preconsumer = (1 - beverage_preconsumer_waste)/(1 - beverage_preconsumer_waste/2),
-                            consumer = (1 - beverage_consumer_waste)/(1 - beverage_consumer_waste/2),
+                            consumer = unname((1 - beverage_consumer_waste)/(1 - beverage_consumer_waste/2)),
                             allavoidable = (1 - beverage_allavoidable_waste)/(1 - beverage_allavoidable_waste/2))
-
-beverage_waste_factors_foreign <- c(baseline = 1, 
-                                    preconsumer = (1 - beverage_preconsumer_waste_foreign)/(1 - beverage_preconsumer_waste_foreign/2),
-                                    consumer = (1 - beverage_consumer_waste_foreign)/(1 - beverage_consumer_waste_foreign/2),
-                                    allavoidable = (1 - beverage_allavoidable_waste_foreign)/(1 - beverage_allavoidable_waste_foreign/2))
 
 # Diet proportions
 beverage_diet_factors <- c(baseline = 1,
@@ -209,21 +184,17 @@ beverage_diet_factors <- c(baseline = 1,
 
 # Product
 beverage_waste_x_diet <- outer(beverage_waste_factors, beverage_diet_factors)
-beverage_waste_x_diet_foreign <- outer(beverage_waste_factors_foreign, beverage_diet_factors)
 # Names
 beverage_waste_x_diet_names <- outer(names(beverage_waste_factors), names(beverage_diet_factors), function(w, d) paste('D', d, 'WR', w, sep = '_')) %>%
   as.vector
 
 
 softdrink_factors <- as.vector(beverage_waste_x_diet)
-softdrink_factors_foreign <- as.vector(beverage_waste_x_diet_foreign)
 
 # Non soft drinks: diet factors are 1
 harddrinks_diet_factors <- rep(1, 5)
 harddrinks_waste_x_diet <- outer(beverage_waste_factors, harddrinks_diet_factors)
-harddrinks_waste_x_diet_foreign <- outer(beverage_waste_factors_foreign, harddrinks_diet_factors)
 harddrink_factors <- as.vector(harddrinks_waste_x_diet)
-harddrink_factors_foreign <- as.vector(harddrinks_waste_x_diet_foreign)
 
 # rbind the non-beverage with beverage.
 softdrink_codes <- c('311930', '312110')
@@ -242,17 +213,6 @@ scenario_values_bea_harddrinks <- map2_dfr(harddrink_codes, harddrink_names, ~ d
 
 scenario_values_bea <- bind_rows(scenario_values_bea_notbeverage, scenario_values_bea_softdrinks, scenario_values_bea_harddrinks)
 
-scenario_values_bea_softdrinks_foreign <- map2_dfr(softdrink_codes, softdrink_names, ~ data.frame(BEA_389_code = .x,
-                                                                                                  BEA_389_def = .y,
-                                                                                                  scenario = beverage_waste_x_diet_names,
-                                                                                                  value  = softdrink_factors_foreign))
-scenario_values_bea_harddrinks_foreign <- map2_dfr(harddrink_codes, harddrink_names, ~ data.frame(BEA_389_code = .x,
-                                                                                                  BEA_389_def = .y,
-                                                                                                  scenario = beverage_waste_x_diet_names,
-                                                                                                  value  = harddrink_factors_foreign))
-
-scenario_values_bea_foreign <- bind_rows(scenario_values_bea_notbeverage_foreign, scenario_values_bea_softdrinks_foreign, scenario_values_bea_harddrinks_foreign)
-
 # Reshape to wide then divide everything by the baseline to get the normalized consumption factors.
 scenario_values_bea_wide <- scenario_values_bea %>%
   pivot_wider(id_cols = c(BEA_389_code, BEA_389_def), names_from = scenario) %>%
@@ -261,12 +221,4 @@ scenario_values_bea_wide <- scenario_values_bea %>%
 scenario_factors_bea <- scenario_values_bea_wide %>%
   mutate(across(where(is.numeric), ~ ./D_baseline_WR_baseline))
 
-scenario_values_bea_wide_foreign <- scenario_values_bea_foreign %>%
-  pivot_wider(id_cols = c(BEA_389_code, BEA_389_def), names_from = scenario) %>%
-  select(BEA_389_code, BEA_389_def, D_baseline_WR_baseline, everything())
-
-scenario_factors_bea_foreign <- scenario_values_bea_wide_foreign %>%
-  mutate(across(where(is.numeric), ~ ./D_baseline_WR_baseline))
-
 write_csv(scenario_factors_bea, file.path(intermediate_output_path, 'bea_consumption_factors_diet_waste_scenarios.csv'))
-write_csv(scenario_factors_bea_foreign, file.path(intermediate_output_path, 'bea_consumption_factors_diet_waste_scenarios_foreign.csv'))

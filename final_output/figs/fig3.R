@@ -39,9 +39,9 @@ p_animal_fvsd_10 <- ggplot(all_extinction_sum[kingdom %in% 'animals' & scenario_
 
 p_animal_fvsd_10 <- label_scenario_categories(p_animal_fvsd_10)
 
-ggsave(file.path(fp_fig, 'foreign_vs_domestic_vlt_by_scenario_10.png'), p_vlt_fvsd_10, height = 7, width = 12, dpi = 400)
-ggsave(file.path(fp_fig, 'foreign_vs_domestic_plantextinctions_by_scenario_10.png'), p_plantextinction_fvsd_10, height = 7, width = 12, dpi = 400)
-ggsave(file.path(fp_fig, 'foreign_vs_domestic_animalextinctions_by_scenario_10.png'), p_animal_fvsd_10, height = 7, width = 12, dpi = 400)
+ggsave(file.path(fp_fig, 'foreign_vs_domestic_vlt_by_scenario_10.png'), p_vlt_fvsd_10, height = 7, width = 12, dpi = 400, device = png)
+ggsave(file.path(fp_fig, 'foreign_vs_domestic_plantextinctions_by_scenario_10.png'), p_plantextinction_fvsd_10, height = 7, width = 12, dpi = 400, device = png)
+ggsave(file.path(fp_fig, 'foreign_vs_domestic_animalextinctions_by_scenario_10.png'), p_animal_fvsd_10, height = 7, width = 12, dpi = 400, device = png)
 
 
 # Additional f vs d figs for supplement -----------------------------------
@@ -100,11 +100,11 @@ p_reptile_fvsd_10 <- ggplot(all_extinction_sum[taxon %in% 'reptiles' & scenario_
 
 p_reptile_fvsd_10 <- label_scenario_categories(p_reptile_fvsd_10)
 
-ggsave(file.path(fp_fig, 'foreign_vs_domestic_alltaxaextinctions_by_scenario_10.png'), p_alltaxa_fvsd_10, height = 7, width = 12, dpi = 400)
-ggsave(file.path(fp_fig, 'foreign_vs_domestic_amphibianextinctions_by_scenario_10.png'), p_amphibian_fvsd_10, height = 7, width = 12, dpi = 400)
-ggsave(file.path(fp_fig, 'foreign_vs_domestic_birdextinctions_by_scenario_10.png'), p_bird_fvsd_10, height = 7, width = 12, dpi = 400)
-ggsave(file.path(fp_fig, 'foreign_vs_domestic_mammalextinctions_by_scenario_10.png'), p_mammal_fvsd_10, height = 7, width = 12, dpi = 400)
-ggsave(file.path(fp_fig, 'foreign_vs_domestic_reptileextinctions_by_scenario_10.png'), p_reptile_fvsd_10, height = 7, width = 12, dpi = 400)
+ggsave(file.path(fp_fig, 'foreign_vs_domestic_alltaxaextinctions_by_scenario_10.png'), p_alltaxa_fvsd_10, height = 7, width = 12, dpi = 400, device = png)
+ggsave(file.path(fp_fig, 'foreign_vs_domestic_amphibianextinctions_by_scenario_10.png'), p_amphibian_fvsd_10, height = 7, width = 12, dpi = 400, device = png)
+ggsave(file.path(fp_fig, 'foreign_vs_domestic_birdextinctions_by_scenario_10.png'), p_bird_fvsd_10, height = 7, width = 12, dpi = 400, device = png)
+ggsave(file.path(fp_fig, 'foreign_vs_domestic_mammalextinctions_by_scenario_10.png'), p_mammal_fvsd_10, height = 7, width = 12, dpi = 400, device = png)
+ggsave(file.path(fp_fig, 'foreign_vs_domestic_reptileextinctions_by_scenario_10.png'), p_reptile_fvsd_10, height = 7, width = 12, dpi = 400, device = png)
 
 
 # Grand totals of foreign and domestic extinctions with stacked bars --------------------

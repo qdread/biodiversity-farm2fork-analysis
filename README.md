@@ -2,9 +2,9 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5949590.svg)](https://doi.org/10.5281/zenodo.5949590)
 
-Code to reproduce all analysis presented in the manuscript **Biodiversity effects of food system sustainability actions from farm to fork**, and the data for the associated [Shiny app](https://qdread.shinyapps.io/biodiversity-farm2fork).
+This repository contains code to reproduce all analysis presented in the manuscript **Biodiversity effects of food system sustainability actions from farm to fork**, and the data for the associated [Shiny app](https://qdread.shinyapps.io/biodiversity-farm2fork).
 
-**Citation (to be updated when final)**: Read, Quentin D., Kelly L. Hondula, and Mary K. Muth. Biodiversity effects of food system sustainability actions from farm to fork. *PNAS*, in preparation.
+**Citation (to be updated when final)**: Read, Quentin D., Kelly L. Hondula, and Mary K. Muth. Biodiversity effects of food system sustainability actions from farm to fork. *Proceedings of the National Academy of Sciences*, accepted.
 
 ## Organization of repository
 
@@ -48,4 +48,4 @@ In addition, a few functions are called from an R package `Rutilitybelt` that I 
 this repo, called `Rutilitybelt_0.0.0.9000.tar.gz`. It is installed from source as part of script `00`. It can also be installed from source using the
 command `R CMD INSTALL Rutilitybelt_0.0.0.9000.tar.gz`.
 
-*last modified by QDR, 02 February 2022*
+*last modified by QDR, 04 February 2022*

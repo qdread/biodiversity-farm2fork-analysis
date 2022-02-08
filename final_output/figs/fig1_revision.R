@@ -113,4 +113,4 @@ p_totaldemand_sums <- ggdraw(p_totaldemand_sums + theme(plot.margin = unit(c(25,
   draw_label(label = 'diet scenario', x = 0.5, y = 0.97) +
   draw_label(label = 'waste scenario', x = 0.99, y = 0.5, angle = -90)
 
-ggsave(file.path(fp_fig, 'total_consumption_10_scenarios.png'), p_totaldemand_sums, height = 9*.75, width = 12, dpi = 400)
+ggsave(file.path(fp_fig, 'total_consumption_10_scenarios.png'), p_totaldemand_sums, height = 9*.75, width = 12, dpi = 400, device = png)

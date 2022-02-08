@@ -62,7 +62,7 @@ make_world_panel_map <- function(map_panel_data, base_map, region_type, variable
                              title_width = 10,
                              legend_height = 15)
   
-  png(glue('{fp_foreignmaps}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=100,units='cm')
+  png(glue('{fp_foreignmaps}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=200,units='cm')
   grid.draw(maps_laidout)
   dev.off()
   

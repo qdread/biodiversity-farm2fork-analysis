@@ -124,7 +124,7 @@ make_20panel_map <- function(map_panel_data, base_map, region_type, variable, fi
                              title_width = 10,
                              legend_height = 15)
   
-  png(glue('{fp_fig}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=200,units='cm')
+  png(glue('{fp_fig}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=300,units='cm')
   grid.draw(maps_laidout)
   dev.off()
   
@@ -192,7 +192,7 @@ make_20panel_map_v2 <- function(map_panel_data, base_map, region_type, variable,
                              legend_height = 15)
   
   if (output_type == 'png') {
-    png(glue('{fp_fig}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=200,units='cm')
+    png(glue('{fp_fig}/{file_name}.png'), height=4.5*n_waste+1+1.5,width=6.0*5+1,res=300,units='cm')
     grid.draw(maps_laidout)
     dev.off()
   } else {
@@ -316,7 +316,7 @@ make_panel_map_wrap <- function(map_panel_data, base_map, map_title, panel_title
                                   title_height = 10,
                                   legend_height = 20)
   
-  png(glue('{fp_baselinemaps}/{file_name}.png'), height=6.0*nrows+2.0,width=6.0*ncols,res=200,units='cm')
+  png(glue('{fp_baselinemaps}/{file_name}.png'), height=6.0*nrows+2.0,width=6.0*ncols,res=300,units='cm')
   grid.draw(maps_laidout)
   dev.off()
   

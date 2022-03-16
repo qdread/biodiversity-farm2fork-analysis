@@ -51,15 +51,15 @@ county_map <- county_map_trans %>%
   rbind(alaska) %>%
   rbind(hawaii)
 
-
+# Convert land from square km. back to hectares (multiply by 100)
 domestic_land_toplot <- county_land_flow_sums[scenario_diet == 'baseline' & scenario_waste == 'baseline',
-                                              .(VLT = sum(flow_outbound_domestic, na.rm = TRUE)),
+                                              .(VLT = sum(flow_outbound_domestic * 100, na.rm = TRUE)),
                                               by = .(county)]
 domestic_ext_toplot <- county_extinction_flow_sums[scenario_diet == 'baseline' & scenario_waste == 'baseline',
                                                    .(VBT = sum(flow_outbound_domestic, na.rm = TRUE)),
                                                    by = .(county)]
 foreign_land_toplot <- foreign_land_flow_sums[scenario_diet == 'baseline' & scenario_waste == 'baseline',
-                                              .(VLT = sum(flow_outbound_foreign, na.rm = TRUE)),
+                                              .(VLT = sum(flow_outbound_foreign * 100, na.rm = TRUE)),
                                               by = .(ISO_A3)]
 foreign_ext_toplot <- foreign_extinction_flow_sums[scenario_diet == 'baseline' & scenario_waste == 'baseline',
                                                    .(VBT = sum(flow_outbound_foreign, na.rm = TRUE)),

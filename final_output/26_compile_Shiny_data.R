@@ -286,7 +286,7 @@ divide_numeric <- function(dt, n = 1e6) {
 }
 divide_numeric(county_goods_flow_sums)
 divide_numeric(county_land_flow_sums)
-divide_numeric(foreign_land_flow_sums)
+divide_numeric(foreign_land_flow_sums, n = 1e2)
 
 # Remove -99 codes
 foreign_extinction_flow_sums <- foreign_extinction_flow_sums[!ISO_A3 %in% '-99']
